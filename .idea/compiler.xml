@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Dependency_Analyzer" />
+        <module name="dependency_analyzer" />
       </profile>
     </annotationProcessing>
   </component>
