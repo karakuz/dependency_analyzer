@@ -29,6 +29,7 @@ public class Main {
         List<String> javaFileLocations = directoryChecker.getJavaFiles(ROOT, PROJECT_FILE_PATH);
 
 
+        List<List<String>> allImports = new ArrayList<>();
 
         for(String javaFileLocation : javaFileLocations){
             System.out.println("javaFileLocation: " + javaFileLocation);
@@ -76,6 +77,7 @@ public class Main {
 
 
             System.out.println("");
+            allImports.add(imports);
         }
 
         CompilationUnit cu = StaticJavaParser.parse(new File(ROOT + PROJECT_FILE_PATH + "\\com\\test\\Main.java"));
@@ -84,7 +86,9 @@ public class Main {
 
 
         ExcelAPI excelApi = new ExcelAPI();
-        Workbook workbook = excelApi.testWorksheet();
-        excelApi.saveWorksheet(workbook);
+        /*Workbook workbook = excelApi.testWorksheet();
+        excelApi.saveWorksheet(workbook);*/
+
+        excelApi.test(allImports, javaFileLocations);
     }
 }

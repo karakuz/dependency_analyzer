@@ -6,8 +6,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 public class ExcelAPI {
+
+    public void test(List<List<String>> allImports, List<String> javaFileLocations){
+        System.out.println("");
+        for(int i=0; i<allImports.size(); i++){
+            System.out.println("Import names in " + javaFileLocations.get(i) + ": ");
+            List<String> importList = allImports.get(i);
+
+            for(int x=0; x<importList.size(); x++){
+                System.out.println(importList.get(x));
+            }
+        }
+    }
 
     public Workbook testWorksheet(){
         Workbook workbook = new XSSFWorkbook();
