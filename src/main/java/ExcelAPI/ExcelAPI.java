@@ -6,20 +6,113 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
+import java.util.*;
 
 public class ExcelAPI {
-
-    public void test(List<List<String>> allImports, List<String> javaFileLocations){
+    public void writeClassDependencies(Workbook workbook, List<List<String>> allImports, List<String> classNames) throws Exception {
         System.out.println("");
-        for(int i=0; i<allImports.size(); i++){
-            System.out.println("Import names in " + javaFileLocations.get(i) + ": ");
-            List<String> importList = allImports.get(i);
 
-            for(int x=0; x<importList.size(); x++){
-                System.out.println(importList.get(x));
+        Set<String> allDependencies = new HashSet<>();
+        HashMap<String, List<String>> dependencies = new HashMap<>();
+
+        for(int i=0; i<allImports.size(); i++){
+            String className = classNames.get(i);
+            System.out.println("Import names in " + className + ": ");
+            List<String> classDependency = allImports.get(i);
+
+            List<String> classDependencies = new ArrayList<>();
+            for(int x=0; x<classDependency.size(); x++){
+                String dependency = classDependency.get(x);
+
+                if(!dependency.startsWith("java") && !dependency.startsWith("javax")){
+                    System.out.println("dependency: " + dependency);
+                    allDependencies.add(dependency);
+                    classDependencies.add(dependency);
+                }
+            }
+            dependencies.put(className,classDependencies);
+        }
+        System.out.println(dependencies);
+        System.out.println(allDependencies);
+
+
+        Sheet sheet = workbook.createSheet("ClassDependencies");
+
+        CellStyle tableHeaderStyle = workbook.createCellStyle();
+        tableHeaderStyle.setAlignment(HorizontalAlignment.CENTER);
+        tableHeaderStyle.setBorderTop(BorderStyle.MEDIUM);
+        tableHeaderStyle.setBorderRight(BorderStyle.MEDIUM);
+        tableHeaderStyle.setBorderBottom(BorderStyle.MEDIUM);
+        tableHeaderStyle.setBorderLeft(BorderStyle.MEDIUM);
+
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+
+        XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+        font.setFontName("Arial");
+        font.setFontHeightInPoints((short) 10);
+        font.setBold(true);
+
+        tableHeaderStyle.setFont(font);
+
+
+        Row firstRow = sheet.createRow(0);
+
+        ArrayList<String> allDependencies_ = new ArrayList<>(allDependencies);
+
+        int columnNumber = 1;
+        for(int i=0; i<allDependencies_.size(); i++){
+            Cell headerCell = firstRow.createCell(columnNumber++);
+            String dependency = allDependencies_.get(i);
+
+            headerCell.setCellValue(dependency);
+            headerCell.setCellStyle(tableHeaderStyle);
+            sheet.autoSizeColumn(columnNumber);
+        }
+
+        Set<String> classNamesAsKeySet = dependencies.keySet();
+        ArrayList<String> classNames_ = new ArrayList<>(classNamesAsKeySet);
+
+        Collection<List<String>> classDependenciesAsKeySet = dependencies.values();
+        ArrayList<List<String>> classDependencies_ = new ArrayList<>(classDependenciesAsKeySet);
+
+
+        int rowNumber = 1;
+        for(int i=0; i<classNames_.size(); i++){
+            String className = classNames_.get(i);
+            List<String> classDependencies = classDependencies_.get(i);
+
+            Row row = sheet.createRow(rowNumber++);
+            Cell classNameCell = row.createCell(0);
+            classNameCell.setCellValue(className);
+            classNameCell.setCellStyle(tableHeaderStyle);
+            sheet.autoSizeColumn(0);
+
+            columnNumber = 1;
+            for (String dependency : allDependencies_) {
+                Cell isDependantOrNotCell = row.createCell(columnNumber);
+
+                if (classDependencies.contains(dependency)) {
+                    sheet.autoSizeColumn(columnNumber);
+                    isDependantOrNotCell.setCellValue("X");
+                    isDependantOrNotCell.setCellStyle(cellStyle);
+                } else {
+                    isDependantOrNotCell.setCellValue("");
+                    isDependantOrNotCell.setCellStyle(cellStyle);
+                }
+                sheet.autoSizeColumn(columnNumber++);
             }
         }
+
+        saveWorksheet(workbook);
+    }
+
+    public Workbook createWorkbook(){
+        return new XSSFWorkbook();
     }
 
     public Workbook testWorksheet(){

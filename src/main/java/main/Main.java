@@ -30,6 +30,7 @@ public class Main {
 
 
         List<List<String>> allImports = new ArrayList<>();
+        List<String> classNames = new ArrayList<>();
 
         for(String javaFileLocation : javaFileLocations){
             System.out.println("javaFileLocation: " + javaFileLocation);
@@ -40,6 +41,7 @@ public class Main {
             List<String> methodNames = new ArrayList<>();
             List<String> methodCalls = new ArrayList<>();
             List<String> imports = new ArrayList<>();
+            List<String> packageName = new ArrayList<>();
 
 
             VoidVisitor<List<String>> classVisitor = new ClassVisitor();
@@ -47,15 +49,16 @@ public class Main {
             String className = (className_.size() > 0) ? className_.get(0) : null;
             if(className == null)
                 continue;
-            System.out.println("Class Name: " + className);
+            //System.out.println("Class Name: " + className);
 
-            VoidVisitor<Void> packageDeclarationVisitor = new PackageDeclarationVisitor();
-            packageDeclarationVisitor.visit(cu, null);
+            VoidVisitor<List<String>> packageDeclarationVisitor = new PackageDeclarationVisitor();
+            packageDeclarationVisitor.visit(cu, packageName);
+            classNames.add(packageName.get(0) + "." + className);
 
             VoidVisitor<List<String>> importDeclarationVisitor = new ImportDeclarationVisitor();
             importDeclarationVisitor.visit(cu, imports);
 
-            VoidVisitor<Void> variableDeclarationExprVisitor = new VariableDeclerationExprVisitor();
+            /*VoidVisitor<Void> variableDeclarationExprVisitor = new VariableDeclerationExprVisitor();
             variableDeclarationExprVisitor.visit(cu, null);
 
             VoidVisitor<Void> objectCreationExprVisitor = new ObjectCreationExprVisitor();
@@ -65,15 +68,15 @@ public class Main {
             fieldVisitor.visit(cu, null);
 
             VoidVisitor<List<String>> methodVisitor = new MethodVisitor();
-            methodVisitor.visit(cu, methodNames);
+            methodVisitor.visit(cu, methodNames);*/
             //methodNames.forEach(n -> System.out.println("Method Name Collected: " + n));
 
             /*TypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(new File(PROJECT_FILE_PATH + "\\com\\test\\store")));
             JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
             StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);*/
 
-            VoidVisitor<Void> methodCallVisitor = new MethodCallVisitor();
-            methodCallVisitor.visit(cu, null);
+            /*VoidVisitor<Void> methodCallVisitor = new MethodCallVisitor();
+            methodCallVisitor.visit(cu, null);*/
 
 
             System.out.println("");
@@ -89,6 +92,9 @@ public class Main {
         /*Workbook workbook = excelApi.testWorksheet();
         excelApi.saveWorksheet(workbook);*/
 
-        excelApi.test(allImports, javaFileLocations);
+        //excelApi.test(allImports, javaFileLocations);
+
+        Workbook workbook = excelApi.createWorkbook();
+        excelApi.writeClassDependencies(workbook, allImports, classNames);
     }
 }

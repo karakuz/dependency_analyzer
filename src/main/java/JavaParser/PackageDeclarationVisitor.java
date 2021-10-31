@@ -3,10 +3,13 @@ package JavaParser;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class PackageDeclarationVisitor extends VoidVisitorAdapter<Void> {
+import java.util.List;
+
+public class PackageDeclarationVisitor extends VoidVisitorAdapter<List<String>> {
     @Override
-    public void visit(PackageDeclaration packageDecleration, Void arg) {
-        super.visit(packageDecleration, arg);
-        System.out.println("packageDecleration: " + packageDecleration);
+    public void visit(PackageDeclaration packageDecleration, List<String> packageName) {
+        super.visit(packageDecleration, packageName);
+        packageName.add(packageDecleration.getNameAsString());
+        //System.out.println("packageDecleration: " + packageDecleration);
     }
 }
