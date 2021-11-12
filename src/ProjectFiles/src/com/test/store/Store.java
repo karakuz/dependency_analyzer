@@ -12,7 +12,7 @@ public class Store {
     private Integer storeID;
     private User storeOwner;
     private final LocalDate createdDate;
-    private List<String> products;
+    private List<Item> products;
 
     private static Database database = new Database();
     private static Integer ID = 0;
@@ -21,7 +21,7 @@ public class Store {
         this.storeID = ++ID;
         this.storeOwner = storeOwner;
         this.createdDate = createdDate;
-        this.products = new ArrayList<String>();
+        this.products = new ArrayList<Item>();
     }
 
     public void saveStoreToDB(){
@@ -47,12 +47,12 @@ public class Store {
         return storeID;
     }
 
-    public List<String> getProducts() {
+    public List<Item> getProducts() {
         return products;
     }
 
-    public void addProduct(List<String> products) {
-        List<String> currentProducts = new ArrayList<>(this.products.size() + products.size());
+    public void addProduct(List<Item> products) {
+        List<Item> currentProducts = new ArrayList<>(this.products.size() + products.size());
         currentProducts.addAll(this.products);
         currentProducts.addAll(products);
         this.products = currentProducts;

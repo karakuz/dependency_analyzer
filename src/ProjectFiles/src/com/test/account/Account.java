@@ -1,36 +1,23 @@
 package com.test.account;
 
+import com.test.credit_card.Card;
 import com.test.database.Database;
 import com.test.user.User;
 
 import java.time.LocalDate;
 
 public class Account {
-    private User user;
     private LocalDate createdDate;
     private double balance = 0;
     private String userType;
+    protected Card card = null;
+
 
     private static Database database = new Database();
 
-    public Account(User user, LocalDate createdDate, String userType) {
-        this.user = user;
+    public Account(LocalDate createdDate, String userType) {
         this.createdDate = createdDate;
         this.userType = userType;
-    }
-
-    public void saveAccountToDB(){
-        database.connectToDB();
-
-        System.out.println("Saving: " + this.user.toString());
-        boolean success = database.saveData("DB_NAME", "Customers");
-        if(success)
-            System.out.println("Account has been saved");
-        database.closeConnection();
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public LocalDate getCreateDate() {
@@ -44,11 +31,15 @@ public class Account {
     public void setBalance(double balance) {
         if(userType.equals("CUSTOMER")){
             this.balance = balance;
-            database.connectToDB();
-            database.saveData("CUSTOMERS", "CUSTOMERS");
-            database.closeConnection();
+            Database.connectToDB();
+            Database.saveData("CUSTOMERS", "CUSTOMERS");
+            Database.closeConnection();
         }
         else
             System.out.println("User is not Type Customer");
+    }
+
+    public String getUserType() {
+        return userType;
     }
 }
