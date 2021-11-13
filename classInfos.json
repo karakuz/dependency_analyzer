@@ -12,6 +12,9 @@
       ],
       "extends": [
         
+      ],
+      "implements": [
+        
       ]
     },
     "com.test.account.Account": {
@@ -22,6 +25,9 @@
       ],
       "extends": [
         
+      ],
+      "implements": [
+        
       ]
     },
     "com.test.credit_card.Card": {
@@ -30,6 +36,9 @@
       ],
       "extends": [
         
+      ],
+      "implements": [
+        "CreditCard"
       ]
     },
     "com.test.credit_card.CreditCard": {
@@ -39,6 +48,9 @@
       ],
       "extends": [
         
+      ],
+      "implements": [
+        
       ]
     },
     "com.test.credit_card.MasterCard": {
@@ -47,6 +59,9 @@
       ],
       "extends": [
         "Card"
+      ],
+      "implements": [
+        
       ]
     },
     "com.test.credit_card.Visa": {
@@ -55,6 +70,9 @@
       ],
       "extends": [
         "Card"
+      ],
+      "implements": [
+        
       ]
     },
     "com.test.database.Database": {
@@ -62,6 +80,9 @@
         
       ],
       "extends": [
+        
+      ],
+      "implements": [
         
       ]
     },
@@ -74,6 +95,9 @@
       ],
       "extends": [
         
+      ],
+      "implements": [
+        
       ]
     },
     "com.test.store.Item": {
@@ -81,6 +105,9 @@
         
       ],
       "extends": [
+        
+      ],
+      "implements": [
         
       ]
     },
@@ -90,6 +117,9 @@
         "com.test.user.User"
       ],
       "extends": [
+        
+      ],
+      "implements": [
         
       ]
     },
@@ -103,6 +133,9 @@
       ],
       "extends": [
         "Account"
+      ],
+      "implements": [
+        
       ]
     }
   }
