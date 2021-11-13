@@ -5,7 +5,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.List;
 
-public class ClassVisitor extends VoidVisitorAdapter<List<String>> {
+public class ClassNamesVisitor extends VoidVisitorAdapter<List<String>> {
     @Override
     public void visit(ClassOrInterfaceDeclaration md, List<String> className) {
         super.visit(md, className);

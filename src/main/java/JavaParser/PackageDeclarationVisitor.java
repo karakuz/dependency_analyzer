@@ -10,6 +10,6 @@ public class PackageDeclarationVisitor extends VoidVisitorAdapter<List<String>> 
     public void visit(PackageDeclaration packageDecleration, List<String> packageName) {
         super.visit(packageDecleration, packageName);
         packageName.add(packageDecleration.getNameAsString());
-        //System.out.println("packageDecleration: " + packageDecleration);
+        System.out.println("packageDeclaration: " + packageDecleration);
     }
 }
