@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class Main {
     private static final String ROOT = System.getProperty("user.dir") + "\\";
     private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\src";
@@ -36,6 +35,7 @@ public class Main {
 
             List<String> className_ = new ArrayList<>();
             List<String> extends_ = new ArrayList<>();
+            List<String> implements_ = new ArrayList<>();
             List<String> methodNames = new ArrayList<>();
             List<String> methodCalls = new ArrayList<>();
             List<String> imports = new ArrayList<>();
@@ -67,14 +67,25 @@ public class Main {
             JsonArray importsArray = Json.array(importsAsArray);
             JsonObject classInfos = Json.object();
 
+
             VoidVisitor<List<String>> classExtendsVisitor = new ClassExtendsVisitor();
             classExtendsVisitor.visit(cu, extends_);
-
 
             String[] extendsAsArray = (extends_.size() > 0) ? new String[]{extends_.get(0)} : new String[]{};
             JsonArray extendsArray = Json.array(extendsAsArray);
 
-            classInfos.add("imports", importsArray).add("extends", extendsArray);
+
+            VoidVisitor<List<String>> classImplementsVisitor = new ClassImplementsVisitor();
+            classImplementsVisitor.visit(cu, implements_);
+            String[] implementsAsArray = (implements_.size() > 0) ? new String[]{implements_.get(0)} : new String[]{};
+            JsonArray implementsArray = Json.array(implementsAsArray);
+
+
+            classInfos
+                    .add("imports", importsArray)
+                    .add("extends", extendsArray)
+                    .add("implements", implementsArray);
+
             classes.set(foundClassName, classInfos);
 
             /*VoidVisitor<Void> variableDeclarationExprVisitor = new VariableDeclerationExprVisitor();
