@@ -1,0 +1,109 @@
+{
+  "classes": {
+    "com.test.Main": {
+      "imports": [
+        "com.test.account.Account",
+        "com.test.credit_card.MasterCard",
+        "com.test.credit_card.Visa",
+        "com.test.payment.Payment",
+        "com.test.store.Item",
+        "com.test.store.Store",
+        "com.test.user.User"
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.account.Account": {
+      "imports": [
+        "com.test.credit_card.Card",
+        "com.test.database.Database",
+        "com.test.user.User"
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.credit_card.Card": {
+      "imports": [
+        "com.test.user.User"
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.credit_card.CreditCard": {
+      "imports": [
+        "com.test.database.Database",
+        "com.test.user.User"
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.credit_card.MasterCard": {
+      "imports": [
+        "com.test.user.User"
+      ],
+      "extends": [
+        "Card"
+      ]
+    },
+    "com.test.credit_card.Visa": {
+      "imports": [
+        "com.test.user.User"
+      ],
+      "extends": [
+        "Card"
+      ]
+    },
+    "com.test.database.Database": {
+      "imports": [
+        
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.payment.Payment": {
+      "imports": [
+        "com.test.credit_card.Card",
+        "com.test.database.Database",
+        "com.test.store.Item",
+        "com.test.user.User"
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.store.Item": {
+      "imports": [
+        
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.store.Store": {
+      "imports": [
+        "com.test.database.Database",
+        "com.test.user.User"
+      ],
+      "extends": [
+        
+      ]
+    },
+    "com.test.user.User": {
+      "imports": [
+        "com.test.account.Account",
+        "com.test.account.UserType",
+        "com.test.credit_card.Card",
+        "com.test.database.Database",
+        "com.test.store.Store"
+      ],
+      "extends": [
+        "Account"
+      ]
+    }
+  }
+}
