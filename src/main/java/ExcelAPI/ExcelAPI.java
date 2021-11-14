@@ -23,7 +23,7 @@ public class ExcelAPI {
         for(int i=0; i<classes.size(); i++){
             String[] classNames = classes.names().toArray(new String[0]);
             String className = classNames[i];
-            if(className.contains("Main")) continue;
+
             JsonObject className_ = classes.asObject().get(className).asObject();
             JsonArray imports = className_.asObject().get("imports").asArray();
             JsonArray extend = className_.asObject().get("extends").asArray();
@@ -291,6 +291,8 @@ public class ExcelAPI {
         int rowNumber3 = 1;
         for(int i = 0; i< classNames_3.size(); i++){
             String className = classNames_3.get(i);
+            if(className.contains("Main")) continue;
+
             List<String> classImplementations = classImplementations_.get(i);
 
             Row row = Implements.createRow(rowNumber3++);

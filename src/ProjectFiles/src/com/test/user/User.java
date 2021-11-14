@@ -1,7 +1,6 @@
 package com.test.user;
 
 import com.test.account.Account;
-import com.test.account.UserType;
 import com.test.credit_card.Card;
 import com.test.database.Database;
 import com.test.store.Store;
