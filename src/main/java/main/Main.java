@@ -1,11 +1,14 @@
 package main;
 
-import JavaParser.*;
+
 import com.eclipsesource.json.*;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import org.apache.poi.ss.usermodel.Workbook;
 
+import ExcelAPI.ExcelAPI;
+import JavaParser.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,10 +124,17 @@ public class Main {
         json.add("classes", classes);
         String jsonStr = json.toString(WriterConfig.PRETTY_PRINT);
         System.out.println(jsonStr);
+        String[] className = classes.names().toArray(new String[0]);
+        System.out.println(className[0]);
+        JsonObject aa = json.asObject().get("classes").asObject();
+        System.out.println(aa.get(className[0]));
 
-        /*ExcelAPI excelApi = new ExcelAPI();
+
+
+
+        ExcelAPI excelApi = new ExcelAPI();
         Workbook workbook = excelApi.createWorkbook();
-        excelApi.writeClassDependencies(workbook, allImports, classNames);*/
+        excelApi.writeClassDependencies(workbook, json);
 
 
     }
