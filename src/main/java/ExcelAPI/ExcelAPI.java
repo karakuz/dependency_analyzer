@@ -147,6 +147,8 @@ public class ExcelAPI {
         int rowNumber = 1;
         for(int i=0; i<classNames_.size(); i++){
             String className = classNames_.get(i);
+            if(className.contains("Main")) continue;
+
             List<String> classDependencies = classDependencies_.get(i);
 
             Row row = Imports.createRow(rowNumber++);
@@ -291,7 +293,6 @@ public class ExcelAPI {
         int rowNumber3 = 1;
         for(int i = 0; i< classNames_3.size(); i++){
             String className = classNames_3.get(i);
-            if(className.contains("Main")) continue;
 
             List<String> classImplementations = classImplementations_.get(i);
 
