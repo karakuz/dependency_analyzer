@@ -11,7 +11,6 @@ import ExcelAPI.ExcelAPI;
 import JavaParser.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Main {
@@ -131,9 +130,9 @@ public class Main {
 
 
 
-        ExcelAPI excelApi = new ExcelAPI();
-        Workbook workbook = excelApi.createWorkbook();
-        excelApi.writeClassDependencies(workbook, json);
+        Workbook workbook = ExcelAPI.createWorkbook();
+        workbook = ExcelAPI.writeDependencies(workbook, json);
+        ExcelAPI.saveWorksheet(workbook);
 
 
     }
