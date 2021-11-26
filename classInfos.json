@@ -1,142 +1,133 @@
 {
-  "classes": {
-    "com.test.Main": {
-      "imports": [
-        "com.test.account.Account",
-        "com.test.credit_card.MasterCard",
-        "com.test.credit_card.Visa",
-        "com.test.payment.Payment",
-        "com.test.store.Item",
-        "com.test.store.Store",
-        "com.test.user.User"
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        
-      ]
+    "classes": {
+        "com.test.Main": {
+            "imports": [
+                "com.test.account.Account",
+                "com.test.credit_card.MasterCard",
+                "com.test.credit_card.Visa",
+                "com.test.payment.Payment",
+                "com.test.store.Item",
+                "com.test.store.Store",
+                "com.test.user.User"
+            ],
+            "extends": [],
+            "implements": []
+        },
+        "com.test.account.Account": {
+            "imports": [
+                "com.test.credit_card.Card",
+                "com.test.database.Database",
+                "com.test.user.User"
+            ],
+            "extends": [],
+            "implements": []
+        },
+        "com.test.credit_card.Card": {
+            "imports": [
+                "com.test.user.User"
+            ],
+            "extends": [],
+            "implements": [
+                "CreditCard"
+            ]
+        },
+        "com.test.credit_card.CreditCard": {
+            "imports": [
+                "com.test.database.Database",
+                "com.test.user.User"
+            ],
+            "extends": [],
+            "implements": []
+        },
+        "com.test.credit_card.MasterCard": {
+            "imports": [
+                "com.test.user.User"
+            ],
+            "extends": [
+                "Card"
+            ],
+            "implements": []
+        },
+        "com.test.credit_card.Visa": {
+            "imports": [
+                "com.test.user.User"
+            ],
+            "extends": [
+                "Card"
+            ],
+            "implements": []
+        },
+        "com.test.database.Database": {
+            "imports": [],
+            "extends": [],
+            "implements": []
+        },
+        "com.test.payment.Payment": {
+            "imports": [
+                "com.test.credit_card.Card",
+                "com.test.database.Database",
+                "com.test.store.Item",
+                "com.test.user.User"
+            ],
+            "extends": [],
+            "implements": []
+        },
+        "com.test.store.Item": {
+            "imports": [],
+            "extends": [],
+            "implements": []
+        },
+        "com.test.store.Store": {
+            "imports": [
+                "com.test.database.Database",
+                "com.test.user.User"
+            ],
+            "extends": [],
+            "implements": []
+        },
+        "com.test.user.User": {
+            "imports": [
+                "com.test.account.Account",
+                "com.test.account.UserType",
+                "com.test.credit_card.Card",
+                "com.test.database.Database",
+                "com.test.store.Store"
+            ],
+            "extends": [
+                "Account"
+            ],
+            "implements": []
+        }
     },
-    "com.test.account.Account": {
-      "imports": [
-        "com.test.credit_card.Card",
-        "com.test.database.Database",
-        "com.test.user.User"
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.credit_card.Card": {
-      "imports": [
-        "com.test.user.User"
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        "CreditCard"
-      ]
-    },
-    "com.test.credit_card.CreditCard": {
-      "imports": [
-        "com.test.database.Database",
-        "com.test.user.User"
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.credit_card.MasterCard": {
-      "imports": [
-        "com.test.user.User"
-      ],
-      "extends": [
-        "Card"
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.credit_card.Visa": {
-      "imports": [
-        "com.test.user.User"
-      ],
-      "extends": [
-        "Card"
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.database.Database": {
-      "imports": [
-        
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.payment.Payment": {
-      "imports": [
-        "com.test.credit_card.Card",
-        "com.test.database.Database",
-        "com.test.store.Item",
-        "com.test.user.User"
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.store.Item": {
-      "imports": [
-        
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.store.Store": {
-      "imports": [
-        "com.test.database.Database",
-        "com.test.user.User"
-      ],
-      "extends": [
-        
-      ],
-      "implements": [
-        
-      ]
-    },
-    "com.test.user.User": {
-      "imports": [
-        "com.test.account.Account",
-        "com.test.account.UserType",
-        "com.test.credit_card.Card",
-        "com.test.database.Database",
-        "com.test.store.Store"
-      ],
-      "extends": [
-        "Account"
-      ],
-      "implements": [
-        
-      ]
-    }
-  }
+    "commits": [
+        {
+            "commit_message": "first commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "\\com\\test\\Main.java",
+                "\\com\\test\\account\\Account.java",
+                "\\com\\test\\account\\UserType.java",
+                "\\com\\test\\database\\Database.java",
+                "\\com\\test\\store\\Store.java",
+                "\\com\\test\\user\\User.java"
+            ]
+        },
+        {
+            "commit_message": "second commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "\\com\\test\\Main.java",
+                "\\com\\test\\account\\Account.java",
+                "\\com\\test\\credit_card\\Card.java",
+                "\\com\\test\\credit_card\\CreditCard.java",
+                "\\com\\test\\credit_card\\MasterCard.java",
+                "\\com\\test\\credit_card\\Visa.java",
+                "\\com\\test\\database\\Database.java",
+                "\\com\\test\\payment\\Payment.java",
+                "\\com\\test\\store\\Item.java",
+                "\\com\\test\\store\\Store.java",
+                "\\com\\test\\user\\User.java"
+            ]
+        }
+    ]
 }

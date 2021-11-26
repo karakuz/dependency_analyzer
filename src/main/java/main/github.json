@@ -1,0 +1,33 @@
+{
+    "commits": [
+        {
+            "commit_message": "first commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "\\com\\test\\Main.java",
+                "\\com\\test\\account\\Account.java",
+                "\\com\\test\\account\\UserType.java",
+                "\\com\\test\\database\\Database.java",
+                "\\com\\test\\store\\Store.java",
+                "\\com\\test\\user\\User.java"
+            ]
+        },
+        {
+            "commit_message": "second commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "\\com\\test\\Main.java",
+                "\\com\\test\\account\\Account.java",
+                "\\com\\test\\credit_card\\Card.java",
+                "\\com\\test\\credit_card\\CreditCard.java",
+                "\\com\\test\\credit_card\\MasterCard.java",
+                "\\com\\test\\credit_card\\Visa.java",
+                "\\com\\test\\database\\Database.java",
+                "\\com\\test\\payment\\Payment.java",
+                "\\com\\test\\store\\Item.java",
+                "\\com\\test\\store\\Store.java",
+                "\\com\\test\\user\\User.java"
+            ]
+        }
+    ]
+}
