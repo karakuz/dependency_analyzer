@@ -1,5 +1,6 @@
 package ExcelAPI;
 
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -61,7 +62,11 @@ public class DependencyWriter {
 
                 if (classDependencies.contains(dependency)) {
                     Imports.autoSizeColumn(columnNumber);
-                    isDependantOrNotCell.setCellValue("X");
+                    isDependantOrNotCell.setCellValue("Dp");
+                    Font font = workbook.createFont();
+                    font.setBold(true);
+                    font.setColor(HSSFColor.HSSFColorPredefined.GREEN.getIndex());
+                    cellStyleOfClassDependencies.setFont(font);
                     isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);
                 } else {
                     isDependantOrNotCell.setCellValue("");
@@ -75,7 +80,7 @@ public class DependencyWriter {
     }
 
     public static Workbook writeExtendDependencies(Workbook workbook, Set<String> allExtends, HashMap<String, List<String>> extends_){
-        Sheet Extends = workbook.createSheet("ExtendDependencies");
+        Sheet Extends = workbook.createSheet("Extend Dependencies");
 
         CellStyle tableHeaderStyleOfExtendDependencies = workbook.createCellStyle();
         ExcelAPI.setTableHeaderStyles(tableHeaderStyleOfExtendDependencies);
@@ -126,8 +131,13 @@ public class DependencyWriter {
 
                 if (classExtentions.contains(extend)) {
                     Extends.autoSizeColumn(columnNumber2);
-                    isDependantOrNotCell.setCellValue("X");
+                    isDependantOrNotCell.setCellValue("Ext");
+                    Font font = workbook.createFont();
+                    font.setBold(true);
+                    font.setColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
+                    cellStyleOfExtendDependencies.setFont(font);
                     isDependantOrNotCell.setCellStyle(cellStyleOfExtendDependencies);
+
                 } else {
                     isDependantOrNotCell.setCellValue("");
                     isDependantOrNotCell.setCellStyle(cellStyleOfExtendDependencies);
@@ -140,7 +150,7 @@ public class DependencyWriter {
     }
 
     public static Workbook writeImplementsDependencies(Workbook workbook,Set<String> allImplementations,HashMap<String, List<String>> implementations) throws Exception{
-        Sheet Implements = workbook.createSheet("ImplementDependencies");
+        Sheet Implements = workbook.createSheet("Implement Dependencies");
 
         CellStyle tableHeaderStyleOfImplementDependencies = workbook.createCellStyle();
         ExcelAPI.setTableHeaderStyles(tableHeaderStyleOfImplementDependencies);
@@ -191,8 +201,15 @@ public class DependencyWriter {
 
                 if (classImplementations.contains(Implement)) {
                     Implements.autoSizeColumn(columnNumber3);
-                    isDependantOrNotCell.setCellValue("X");
+                    //cellStyleOfImplementDependencies.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+                    //cellStyleOfImplementDependencies.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                    isDependantOrNotCell.setCellValue("Impl");
+                    Font font = workbook.createFont();
+                    font.setBold(true);
+                    font.setColor(HSSFColor.HSSFColorPredefined.BLUE.getIndex());
+                    cellStyleOfImplementDependencies.setFont(font);
                     isDependantOrNotCell.setCellStyle(cellStyleOfImplementDependencies);
+
                 } else {
                     isDependantOrNotCell.setCellValue("");
                     isDependantOrNotCell.setCellStyle(cellStyleOfImplementDependencies);
