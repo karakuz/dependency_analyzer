@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.*;
 
 public class DependencyWriter {
+    private final static String emptyCell = "              ";
     public static HashMap<Integer, String> getDependencyNames(){
         HashMap<Integer, String> dependencyNames = new HashMap<>();
         dependencyNames.put(0, "Dp");
@@ -36,11 +37,9 @@ public class DependencyWriter {
         int columnNumber = 1;
         for(int i=0; i<allClassesNames.size(); i++){
             Cell headerCell = firstRowOfClassDependencies.createCell(columnNumber++);
-            String dependency = allClassesNames.get(i);
 
-            headerCell.setCellValue(dependency);
+            headerCell.setCellValue(i+1);
             headerCell.setCellStyle(tableHeaderStyleOfClassDependencies);
-            Imports.autoSizeColumn(columnNumber);
         }
 
         ArrayList<String> allClassNames = new ArrayList<>(allClasses);
@@ -58,8 +57,11 @@ public class DependencyWriter {
 
             Row row = Imports.createRow(rowNumber++);
             Cell classNameCell = row.createCell(0);
-            classNameCell.setCellValue(className);
-            classNameCell.setCellStyle(tableHeaderStyleOfClassDependencies);
+            classNameCell.setCellValue(i+1 + " " + className);
+
+            CellStyle firstColumnStyle = ExcelAPI.setFirstColumnStyles(classNameCell);
+            classNameCell.setCellStyle(firstColumnStyle);
+            firstColumnStyle.setFont(classDependenciesHeaderFont);
             Imports.autoSizeColumn(0);
 
             columnNumber = 1;
@@ -79,7 +81,8 @@ public class DependencyWriter {
                 }
                 if(!cellValue.equals(""))
                     cellValue = cellValue.substring(0, cellValue.length()-1);
-
+                if(cellValue.equals(""))
+                    cellValue = emptyCell;
                 Imports.autoSizeColumn(columnNumber);
                 isDependantOrNotCell.setCellValue(cellValue);
                 isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);
