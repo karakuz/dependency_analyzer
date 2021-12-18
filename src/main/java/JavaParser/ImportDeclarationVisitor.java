@@ -4,6 +4,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ImportDeclarationVisitor extends VoidVisitorAdapter<List<String>> {

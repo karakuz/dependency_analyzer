@@ -1,34 +1,50 @@
 {
     "classes": {
-        "com.test.Main": {
+        "com.test.database.Database": {
+            "imports": [
+
+            ],
+            "extends": [
+
+            ],
+            "implements": [
+
+            ]
+        },
+        "com.test.credit_card.Visa": {
+            "imports": [
+
+            ],
+            "extends": [
+                "com.test.credit_card.Card"
+            ],
+            "implements": [
+
+            ]
+        },
+        "com.test.user.User": {
             "imports": [
                 "com.test.account.Account",
-                "com.test.credit_card.MasterCard",
-                "com.test.credit_card.Visa",
-                "com.test.payment.Payment",
-                "com.test.store.Item",
-                "com.test.store.Store",
-                "com.test.user.User"
-            ],
-            "extends": [],
-            "implements": []
-        },
-        "com.test.account.Account": {
-            "imports": [
                 "com.test.credit_card.Card",
                 "com.test.database.Database",
-                "com.test.user.User"
+                "com.test.store.Store"
             ],
-            "extends": [],
-            "implements": []
+            "extends": [
+                "com.test.account.Account"
+            ],
+            "implements": [
+
+            ]
         },
         "com.test.credit_card.Card": {
             "imports": [
                 "com.test.user.User"
             ],
-            "extends": [],
+            "extends": [
+
+            ],
             "implements": [
-                "CreditCard"
+                "com.test.credit_card.CreditCard"
             ]
         },
         "com.test.credit_card.CreditCard": {
@@ -36,31 +52,48 @@
                 "com.test.database.Database",
                 "com.test.user.User"
             ],
-            "extends": [],
-            "implements": []
+            "extends": [
+
+            ],
+            "implements": [
+
+            ]
         },
         "com.test.credit_card.MasterCard": {
             "imports": [
                 "com.test.user.User"
             ],
             "extends": [
-                "Card"
+                "com.test.credit_card.Card"
             ],
-            "implements": []
+            "implements": [
+
+            ]
         },
-        "com.test.credit_card.Visa": {
+        "com.test.store.Store": {
             "imports": [
+                "com.test.database.Database",
                 "com.test.user.User"
             ],
             "extends": [
-                "Card"
+
             ],
-            "implements": []
+            "implements": [
+
+            ]
         },
-        "com.test.database.Database": {
-            "imports": [],
-            "extends": [],
-            "implements": []
+        "com.test.account.Account": {
+            "imports": [
+                "com.test.credit_card.Card",
+                "com.test.database.Database",
+                "com.test.user.User"
+            ],
+            "extends": [
+
+            ],
+            "implements": [
+
+            ]
         },
         "com.test.payment.Payment": {
             "imports": [
@@ -69,34 +102,23 @@
                 "com.test.store.Item",
                 "com.test.user.User"
             ],
-            "extends": [],
-            "implements": []
+            "extends": [
+
+            ],
+            "implements": [
+
+            ]
         },
         "com.test.store.Item": {
-            "imports": [],
-            "extends": [],
-            "implements": []
-        },
-        "com.test.store.Store": {
             "imports": [
-                "com.test.database.Database",
-                "com.test.user.User"
-            ],
-            "extends": [],
-            "implements": []
-        },
-        "com.test.user.User": {
-            "imports": [
-                "com.test.account.Account",
-                "com.test.account.UserType",
-                "com.test.credit_card.Card",
-                "com.test.database.Database",
-                "com.test.store.Store"
+
             ],
             "extends": [
-                "Account"
+
             ],
-            "implements": []
+            "implements": [
+
+            ]
         }
     },
     "commits": [

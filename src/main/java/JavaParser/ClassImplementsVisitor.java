@@ -11,7 +11,6 @@ public class ClassImplementsVisitor extends VoidVisitorAdapter<List<String>> {
         super.visit(md, implements_);
         if(md.getImplementedTypes().size() > 0){
             implements_.add(md.getImplementedTypes().get(0).toString());
-            System.out.println(md.getImplementedTypes().get(0).toString());
         }
     }
 }

@@ -11,8 +11,6 @@ public class ClassExtendsVisitor extends VoidVisitorAdapter<List<String>> {
         super.visit(md, extends_);
         if(md.getExtendedTypes().size() > 0){
             extends_.add(md.getExtendedTypes().get(0).toString());
-            System.out.println("extends: " + md.getExtendedTypes().get(0).toString());
         }
-
     }
 }
