@@ -27,15 +27,19 @@ public class ExcelAPI {
 
         String[] classNames = classes.names().toArray(String[]::new);
         for(String className : classNames){
-            JsonObject className_ = classes.asObject().get(className).asObject();
+            JsonObject classDependencies = classes.asObject().get(className).asObject();
             //System.out.println("Class Name " + className + ": ");
             
-            importDependencies.add(importClassifier(className_));
-            extendDependencies.add(extendClassifier(className_));
-            implementDependencies.add(implementsClassifier(className_));
+            importDependencies.add(importClassifier(classDependencies));
+            extendDependencies.add(extendClassifier(classDependencies));
+            implementDependencies.add(implementsClassifier(classDependencies));
+
+            checkCyclicDependencies(className, importDependencies.get(importDependencies.size()-1));
+
 
             allClasses.add(className);
         }
+
 
         writeAllDependencies(workbook, allClasses,
                 importDependencies,

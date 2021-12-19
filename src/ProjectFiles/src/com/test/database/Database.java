@@ -1,5 +1,7 @@
 package com.test.database;
 
+//import com.test.user.User;
+
 public class Database {
     private static final String CONNECTION_STRING = "";
     private static final String DB_PASSWORD = "";
