@@ -89,6 +89,27 @@ public class DependencyWriter {
                 Imports.autoSizeColumn(columnNumber++);
             }
         }
+        for(int a =1;a <= allClassNames.size();a++){
+            int count =0;
+            int rowIndex = 0;
+            firstRowOfClassDependencies = Imports.getRow(rowIndex);
+            Cell head = firstRowOfClassDependencies.getCell(a);
+
+            for ( rowIndex = 1; rowIndex <= allClassNames.size(); rowIndex++) {
+                firstRowOfClassDependencies = Imports.getRow(rowIndex);
+                if (firstRowOfClassDependencies != null) {
+                    Cell cell = firstRowOfClassDependencies.getCell(a);
+                    if (cell.getStringCellValue() != emptyCell ) {
+                        count++;
+                    }
+                    if(count>=Imports.getLastRowNum()/2){
+                        CellStyle colored = ExcelAPI.setColoredHeaderStyles(head);
+                        head.setCellStyle(colored);
+                    }
+                }
+            }
+
+        }
 
         return workbook;
     }

@@ -66,7 +66,19 @@ public class ExcelAPI {
         
         return tableCellStyle;
     }
-    
+    public static CellStyle setColoredHeaderStyles(Cell cell){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyle.setFillForegroundColor(IndexedColors.RED.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
+    }
+
     public static CellStyle setCellStyles(Cell cell, int rowNumber, int columnNumber){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -74,12 +86,10 @@ public class ExcelAPI {
         cellStyle.setBorderRight(BorderStyle.MEDIUM);
         cellStyle.setBorderBottom(BorderStyle.MEDIUM);
         cellStyle.setBorderLeft(BorderStyle.MEDIUM);
-
         if(rowNumber == columnNumber){
             cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
             cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         }
-
         return cellStyle;
     }
 
