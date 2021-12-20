@@ -108,7 +108,7 @@ public class DependencyWriter {
                 firstRowOfClassDependencies = Imports.getRow(rowIndex);
                 if (firstRowOfClassDependencies != null) {
                     Cell cell = firstRowOfClassDependencies.getCell(a);
-                    if (cell.getStringCellValue() != emptyCell ) {
+                    if (cell.getStringCellValue() != emptyCell && !cell.getStringCellValue().substring(0,1).equals(",")) {
                         count++;
                     }
                     if(count>=Imports.getLastRowNum()/2){
