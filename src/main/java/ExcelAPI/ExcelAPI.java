@@ -28,14 +28,13 @@ public class ExcelAPI {
         String[] classNames = classes.names().toArray(String[]::new);
         for(String className : classNames){
             JsonObject className_ = classes.asObject().get(className).asObject();
-            System.out.println("Class Name " + className + ": ");
+            //System.out.println("Class Name " + className + ": ");
             
             importDependencies.add(importClassifier(className_));
             extendDependencies.add(extendClassifier(className_));
             implementDependencies.add(implementsClassifier(className_));
 
             allClasses.add(className);
-
         }
 
         writeAllDependencies(workbook, allClasses,
@@ -76,9 +75,20 @@ public class ExcelAPI {
         cellStyle.setBorderBottom(BorderStyle.MEDIUM);
         cellStyle.setBorderLeft(BorderStyle.MEDIUM);
         if(rowNumber == columnNumber){
-            cellStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+            cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
             cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         }
+        return cellStyle;
+    }
+
+    public static CellStyle setFirstColumnStyles(Cell cell){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.LEFT);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+
         return cellStyle;
     }
 

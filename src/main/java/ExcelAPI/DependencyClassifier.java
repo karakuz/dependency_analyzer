@@ -13,12 +13,9 @@ public class DependencyClassifier {
         List<String> importDependencies = new ArrayList<>();
 
         JsonArray imports = className_.asObject().get("imports").asArray();
-        for(JsonValue imported : imports) {
-            if(!Arrays.asList(forbiddenFileExtensions).contains(imported.asString())){
-                //System.out.println("\timports: " + imported.asString());
+        for(JsonValue imported : imports)
+            if(!Arrays.asList(forbiddenFileExtensions).contains(imported.asString()))
                 importDependencies.add(imported.asString());
-            }
-        }
 
         return importDependencies;
     }
@@ -27,10 +24,8 @@ public class DependencyClassifier {
         List<String> classExtends = new ArrayList<>();
 
         JsonArray extend = className_.asObject().get("extends").asArray();
-        for(JsonValue extended : extend){
-            //System.out.println("\textends: " + extended.asString());
+        for(JsonValue extended : extend)
             classExtends.add(extended.asString());
-        }
 
         return classExtends;
     }
@@ -39,11 +34,13 @@ public class DependencyClassifier {
         List<String> classImplementations = new ArrayList<>();
 
         JsonArray implement = className_.asObject().get("implements").asArray();
-        for(JsonValue implemented : implement){
-            //System.out.println("\timplements: " +implemented.asString());
+        for(JsonValue implemented : implement)
             classImplementations.add(implemented.asString());
-        }
 
         return classImplementations;
+    }
+
+    public static void cyclicDependencyClassifier(){
+
     }
 }
