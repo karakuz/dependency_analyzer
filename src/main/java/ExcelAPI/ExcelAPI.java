@@ -5,8 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.eclipsesource.json.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.*;
 
 import static ExcelAPI.DependencyClassifier.*;
@@ -17,8 +16,16 @@ public class ExcelAPI {
         return new XSSFWorkbook();
     }
 
-    public static Workbook writeDependencies(Workbook workbook, JsonObject json){
+    public static Workbook writeDependencies(Workbook workbook, JsonObject json) throws IOException {
+        String projectPath = System.getProperty("user.dir");
+        Reader reader = new FileReader(projectPath + "\\classInfos.json");
+        JsonValue value = Json.parse(reader);
+
         JsonObject classes = json.asObject().get("classes").asObject();
+        JsonValue commits = value.asObject().get("commits");
+        commitClassifier(commits);
+
+
         List<List<String>> importDependencies = new ArrayList<>();
         List<List<String>> extendDependencies = new ArrayList<>();
         List<List<String>> implementDependencies = new ArrayList<>();
@@ -34,11 +41,12 @@ public class ExcelAPI {
             extendDependencies.add(extendClassifier(classDependencies));
             implementDependencies.add(implementsClassifier(classDependencies));
 
-            checkCyclicDependencies(className, importDependencies.get(importDependencies.size()-1));
-
+            //checkCyclicDependencies(className, importDependencies.get(importDependencies.size()-1));
 
             allClasses.add(className);
         }
+
+
 
 
         writeAllDependencies(workbook, allClasses,

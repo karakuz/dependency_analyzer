@@ -47,6 +47,7 @@
             <artifactId>minimal-json</artifactId>
             <version>0.9.5</version>
         </dependency>
+
     </dependencies>
 
     <!-- This blob of configuration tells Maven to make the jar executable. You can run it with:

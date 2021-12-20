@@ -151,11 +151,6 @@ public class Main {
             //allImports.add(imports_);
         }
 
-
-        /*CompilationUnit cu = StaticJavaParser.parse(new File(ROOT + PROJECT_FILE_PATH + "\\com\\test\\Main.java"));
-        VoidVisitor<Void> methodCallVisitor = new MethodCallVisitor();
-        methodCallVisitor.visit(cu, null);*/
-
         json.add("classes", classes);
         String jsonStr = json.toString(WriterConfig.PRETTY_PRINT);
         //System.out.println(jsonStr);

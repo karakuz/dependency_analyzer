@@ -9,6 +9,7 @@ import java.util.*;
 public class DependencyClassifier {
     private static final String[] forbiddenFileExtensions = {".java", ".javax"};
     public static List<List<String>> cyclicDependencies = new ArrayList<>();
+    public static HashMap<String, HashMap<String, Integer>> commitStats = new HashMap<>();
 
     public static List<String> importClassifier(JsonObject classDependencies){
         List<String> importDependencies = new ArrayList<>();
@@ -43,86 +44,65 @@ public class DependencyClassifier {
         return classImplementations;
     }
 
+    public static void commitClassifier(JsonValue commits){
+        System.out.println("commits: " + commits);
+
+        boolean firstIter = true;
+        for(JsonValue commit : commits.asArray()){
+            JsonArray changesOnCommit = commit.asObject().get("changes").asArray();
+            for(int i=0; i<changesOnCommit.size(); i++){
+                System.out.println("commitStats: " + commitStats);
+                String commitChange = changesOnCommit.get(i).asString();
+                if(commitChange.contains("Main.java"))
+                    continue;
+
+                for(int x=0; x<changesOnCommit.size(); x++){
+                    String changedWith = changesOnCommit.get(x).asString();
+                    if(i == x || changedWith.contains("Main.java"))
+                        continue;
+
+                    HashMap<String, Integer> changedWithStat = commitStats.get(commitChange);
+                    System.out.println("\tcommitChange: " + commitChange + "\tchangedWith: " + changedWith);
+
+                    if(changedWithStat == null){
+                        HashMap<String, Integer> newData = new HashMap<>();
+                        newData.put(changedWith, 1);
+                        commitStats.put(commitChange, newData);
+                    }
+                    else{
+                        System.out.println("\tELSE");
+                        if(firstIter){
+                            HashMap<String, Integer> newData = new HashMap<>();
+                            newData.put(changedWith, 1);
+                            changedWithStat.putAll(newData);
+                        }
+                    }
+                    System.out.println("");
+                }
+                firstIter = false;
+            }
+        }
+
+    }
+
     public static void checkCyclicDependencies(String className, List<String> importDependencies){
         System.out.println("className: "+ className + ", importDependencies: " + importDependencies);
 
-        if(cyclicDependencies.size() == 0){
-            //System.out.println("cyclicDependencies.size() == 0");
-            for(String importDependency : importDependencies){
-                List<String> newDependencyChain = new ArrayList<>(Arrays.asList(className, importDependency));
-                cyclicDependencies.add(newDependencyChain);
-            }
-            printCyclicDependencies();
-            return;
+        for(String importDependency : importDependencies){
+            List<String> newDependencyChain = new ArrayList<>(Arrays.asList(className, importDependency));
+            cyclicDependencies.add(newDependencyChain);
         }
-
-
-        List<String> lastClassNames = new ArrayList<>();
+        /*List<String> lastClassNames = new ArrayList<>();
         for(List<String> dependencyChain : cyclicDependencies) {
             String lastClassName = dependencyChain.get(dependencyChain.size() - 1);
             lastClassNames.add(lastClassName);
         }
-        HashMap<Integer, List<String>> indexes = getIndexes(lastClassNames, className, importDependencies);
+        System.out.println("lastClassNames: " + lastClassNames);*/
 
-        System.out.println("indexes: " + indexes);
-        if(indexes.size() == 0){
-            for(String dependency : importDependencies){
-                List<String> dependencies = new ArrayList<>();
-                dependencies.add(className);
-                dependencies.add(dependency);
-                List<String> newDependencyChain = new ArrayList<>(dependencies);
-                //System.out.println("new: " + className + importDependency);
-                cyclicDependencies.add(newDependencyChain);
-            }
-        }
-
-        Iterator it = indexes.entrySet().iterator();
-        while(it.hasNext()){
-            Map.Entry pair = (Map.Entry) it.next();
-
-            List<String> importDependencies_ = (List<String>) pair.getValue();
-            int index = (Integer) pair.getKey();
-
-            List<List<String>> prev = null;
-            List<List<String>> next = null;
-            List<String> indexItem = null;
-            for(String importDependency : importDependencies_){
-                if (index != -1){
-                    String lastClassName = lastClassNames.get(index);
-                    System.out.println("lastClassName: " + lastClassName + ", adding: " + importDependency + " in if");
-                    indexItem = cyclicDependencies.get(index);
-                    cyclicDependencies.add(index++, indexItem);
-                    
-                    List<List<String>> cyclicDependencies_ = new ArrayList<>();
-                    Iterator<List<String>> it_ = cyclicDependencies.iterator();
-                    while(it_.hasNext()){
-                        List<String> item = it_.next();
-                        cyclicDependencies_.add(item);
-                    }
-
-                    cyclicDependencies = cyclicDependencies_;
-                    cyclicDependencies.get(index).add(importDependency);
-                }
-            }
-            //cyclicDependencies.remove(iterIndex);
-        }
         printCyclicDependencies();
     }
 
-    public static HashMap<Integer, List<String>> getIndexes(List<String> lastClassNames, String className, List<String> importDependencies){
-        HashMap<Integer, List<String>> indexes = new HashMap<>();
-        List<String> classNames = new ArrayList<>();
 
-        System.out.println("lastClassNames: " + lastClassNames);
-        for(int i=0; i<lastClassNames.size(); i++){
-            String lastClassName = lastClassNames.get(i);
-            if(className.equals(lastClassName)){
-                classNames.addAll(importDependencies);
-                indexes.put(i, classNames);
-            }
-        }
-        return indexes;
-    }
 
     public static void printCyclicDependencies(){
         for(List<String> innerList : cyclicDependencies){
@@ -132,5 +112,10 @@ public class DependencyClassifier {
             System.out.println("\t" + temp.substring(0,temp.length()-4));
         }
         System.out.println("");
+    }
+
+    public static void printCommitStats(){
+        //HashMap<String, HashMap<String, Integer>>
+        
     }
 }

@@ -1,26 +1,16 @@
 {
     "classes": {
         "com.test.database.Database": {
-            "imports": [
-
-            ],
-            "extends": [
-
-            ],
-            "implements": [
-
-            ]
+            "imports": [],
+            "extends": [],
+            "implements": []
         },
         "com.test.credit_card.Visa": {
-            "imports": [
-
-            ],
+            "imports": [],
             "extends": [
                 "com.test.credit_card.Card"
             ],
-            "implements": [
-
-            ]
+            "implements": []
         },
         "com.test.user.User": {
             "imports": [
@@ -32,17 +22,13 @@
             "extends": [
                 "com.test.account.Account"
             ],
-            "implements": [
-
-            ]
+            "implements": []
         },
         "com.test.credit_card.Card": {
             "imports": [
                 "com.test.user.User"
             ],
-            "extends": [
-
-            ],
+            "extends": [],
             "implements": [
                 "com.test.credit_card.CreditCard"
             ]
@@ -52,12 +38,8 @@
                 "com.test.database.Database",
                 "com.test.user.User"
             ],
-            "extends": [
-
-            ],
-            "implements": [
-
-            ]
+            "extends": [],
+            "implements": []
         },
         "com.test.credit_card.MasterCard": {
             "imports": [
@@ -66,21 +48,15 @@
             "extends": [
                 "com.test.credit_card.Card"
             ],
-            "implements": [
-
-            ]
+            "implements": []
         },
         "com.test.store.Store": {
             "imports": [
                 "com.test.database.Database",
                 "com.test.user.User"
             ],
-            "extends": [
-
-            ],
-            "implements": [
-
-            ]
+            "extends": [],
+            "implements": []
         },
         "com.test.account.Account": {
             "imports": [
@@ -88,12 +64,8 @@
                 "com.test.database.Database",
                 "com.test.user.User"
             ],
-            "extends": [
-
-            ],
-            "implements": [
-
-            ]
+            "extends": [],
+            "implements": []
         },
         "com.test.payment.Payment": {
             "imports": [
@@ -102,23 +74,13 @@
                 "com.test.store.Item",
                 "com.test.user.User"
             ],
-            "extends": [
-
-            ],
-            "implements": [
-
-            ]
+            "extends": [],
+            "implements": []
         },
         "com.test.store.Item": {
-            "imports": [
-
-            ],
-            "extends": [
-
-            ],
-            "implements": [
-
-            ]
+            "imports": [],
+            "extends": [],
+            "implements": []
         }
     },
     "commits": [
@@ -149,6 +111,28 @@
                 "\\com\\test\\store\\Item.java",
                 "\\com\\test\\store\\Store.java",
                 "\\com\\test\\user\\User.java"
+            ]
+        },
+        {
+            "commit_message": "3rd commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "\\com\\test\\account\\Account.java",
+                "\\com\\test\\credit_card\\Card.java",
+                "\\com\\test\\credit_card\\MasterCard.java",
+                "\\com\\test\\payment\\Payment.java",
+                "\\com\\test\\store\\Store.java"
+            ]
+        },
+        {
+            "commit_message": "4th commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "\\com\\test\\credit_card\\Card.java",
+                "\\com\\test\\credit_card\\CreditCard.java",
+                "\\com\\test\\credit_card\\MasterCard.java",
+                "\\com\\test\\credit_card\\Visa.java",
+                "\\com\\test\\database\\Database.java"
             ]
         }
     ]
