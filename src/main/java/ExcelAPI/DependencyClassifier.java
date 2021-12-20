@@ -45,13 +45,10 @@ public class DependencyClassifier {
     }
 
     public static void commitClassifier(JsonValue commits){
-        System.out.println("commits: " + commits);
-
         boolean firstIter = true;
         for(JsonValue commit : commits.asArray()){
             JsonArray changesOnCommit = commit.asObject().get("changes").asArray();
             for(int i=0; i<changesOnCommit.size(); i++){
-                System.out.println("commitStats: " + commitStats);
                 String commitChange = changesOnCommit.get(i).asString();
                 if(commitChange.contains("Main.java"))
                     continue;
@@ -62,7 +59,6 @@ public class DependencyClassifier {
                         continue;
 
                     HashMap<String, Integer> changedWithStat = commitStats.get(commitChange);
-                    System.out.println("\tcommitChange: " + commitChange + "\tchangedWith: " + changedWith);
 
                     if(changedWithStat == null){
                         HashMap<String, Integer> newData = new HashMap<>();
@@ -70,23 +66,50 @@ public class DependencyClassifier {
                         commitStats.put(commitChange, newData);
                     }
                     else{
-                        System.out.println("\tELSE");
                         if(firstIter){
                             HashMap<String, Integer> newData = new HashMap<>();
                             newData.put(changedWith, 1);
                             changedWithStat.putAll(newData);
                         }
+                        else{
+                            if(changedWithStat.get(changedWith) == null){
+                                HashMap<String, Integer> newData = new HashMap<>();
+                                newData.put(changedWith, 1);
+                            }
+                            else{
+                                int numOfChanges = changedWithStat.get(changedWith);
+                                changedWithStat.put(changedWith, ++numOfChanges);
+                            }
+                        }
                     }
-                    System.out.println("");
                 }
-                firstIter = false;
             }
+            firstIter = false;
         }
 
+        Iterator it = commitStats.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            String commitChange = (String) pair.getKey();
+            HashMap<String, Integer> changedWithAll = (HashMap<String, Integer>) pair.getValue();
+
+            Iterator it_ = changedWithAll.entrySet().iterator();
+            while(it_.hasNext()){
+                Map.Entry pair_ = (Map.Entry) it_.next();
+                String changedWith = (String) pair_.getKey();
+                int numOfChanges = (int) pair_.getValue();
+
+                if(commitStats.get(changedWith).get(commitChange) == null){
+                    HashMap<String, Integer> newData = new HashMap<>();
+                    newData.put(commitChange, numOfChanges);
+                    commitStats.get(changedWith).putAll(newData);
+                }
+            }
+        }
     }
 
     public static void checkCyclicDependencies(String className, List<String> importDependencies){
-        System.out.println("className: "+ className + ", importDependencies: " + importDependencies);
+        //System.out.println("className: "+ className + ", importDependencies: " + importDependencies);
 
         for(String importDependency : importDependencies){
             List<String> newDependencyChain = new ArrayList<>(Arrays.asList(className, importDependency));
@@ -99,7 +122,7 @@ public class DependencyClassifier {
         }
         System.out.println("lastClassNames: " + lastClassNames);*/
 
-        printCyclicDependencies();
+        //printCyclicDependencies();
     }
 
 
@@ -116,6 +139,6 @@ public class DependencyClassifier {
 
     public static void printCommitStats(){
         //HashMap<String, HashMap<String, Integer>>
-        
+
     }
 }

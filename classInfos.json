@@ -88,51 +88,51 @@
             "commit_message": "first commit",
             "committer": "31669352+karakuz@users.noreply.github.com",
             "changes": [
-                "\\com\\test\\Main.java",
-                "\\com\\test\\account\\Account.java",
-                "\\com\\test\\account\\UserType.java",
-                "\\com\\test\\database\\Database.java",
-                "\\com\\test\\store\\Store.java",
-                "\\com\\test\\user\\User.java"
+                "com.test.Main",
+                "com.test.account.Account",
+                "com.test.account.UserType",
+                "com.test.database.Database",
+                "com.test.store.Store",
+                "com.test.user.User"
             ]
         },
         {
             "commit_message": "second commit",
             "committer": "31669352+karakuz@users.noreply.github.com",
             "changes": [
-                "\\com\\test\\Main.java",
-                "\\com\\test\\account\\Account.java",
-                "\\com\\test\\credit_card\\Card.java",
-                "\\com\\test\\credit_card\\CreditCard.java",
-                "\\com\\test\\credit_card\\MasterCard.java",
-                "\\com\\test\\credit_card\\Visa.java",
-                "\\com\\test\\database\\Database.java",
-                "\\com\\test\\payment\\Payment.java",
-                "\\com\\test\\store\\Item.java",
-                "\\com\\test\\store\\Store.java",
-                "\\com\\test\\user\\User.java"
+                "com.test.Main",
+                "com.test.account.Account",
+                "com.test.credit_card.Card",
+                "com.test.credit_card.CreditCard",
+                "com.test.credit_card.MasterCard",
+                "com.test.credit_card.Visa",
+                "com.test.database.Database",
+                "com.test.payment.Payment",
+                "com.test.store.Item",
+                "com.test.store.Store",
+                "com.test.user.User"
             ]
         },
         {
             "commit_message": "3rd commit",
             "committer": "31669352+karakuz@users.noreply.github.com",
             "changes": [
-                "\\com\\test\\account\\Account.java",
-                "\\com\\test\\credit_card\\Card.java",
-                "\\com\\test\\credit_card\\MasterCard.java",
-                "\\com\\test\\payment\\Payment.java",
-                "\\com\\test\\store\\Store.java"
+                "com.test.account.Account",
+                "com.test.credit_card.Card",
+                "com.test.credit_card.MasterCard",
+                "com.test.payment.Payment",
+                "com.test.store.Store"
             ]
         },
         {
             "commit_message": "4th commit",
             "committer": "31669352+karakuz@users.noreply.github.com",
             "changes": [
-                "\\com\\test\\credit_card\\Card.java",
-                "\\com\\test\\credit_card\\CreditCard.java",
-                "\\com\\test\\credit_card\\MasterCard.java",
-                "\\com\\test\\credit_card\\Visa.java",
-                "\\com\\test\\database\\Database.java"
+                "com.test.credit_card.Card",
+                "com.test.credit_card.CreditCard",
+                "com.test.credit_card.MasterCard",
+                "com.test.credit_card.Visa",
+                "com.test.database.Database"
             ]
         }
     ]

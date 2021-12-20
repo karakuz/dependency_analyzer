@@ -18,7 +18,7 @@ public class DependencyWriter {
         return dependencyNames;
     };
 
-    public static Workbook writeAllDependencies(Workbook workbook, List<String> allClasses, List<List<String>>... dependenciesList){
+    public static Workbook writeAllDependencies(Workbook workbook, List<String> allClasses, HashMap<String, HashMap<String,Integer>> commitStats, List<List<String>>... dependenciesList){
         HashMap<Integer, String> dependencyNames = getDependencyNames();
 
         Sheet Imports = workbook.createSheet("Dependencies");
@@ -50,14 +50,14 @@ public class DependencyWriter {
 
         int rowNumber = 1;
         for(int i=0; i<allClassNames.size(); i++){
-            String className = allClassNames.get(i);
+            String classNameOnHeader = allClassNames.get(i);
             List<String> importDependencies = allImportDependencies.get(i);
             List<String> extendDependencies = allExtendDependencies.get(i);
             List<String> implementDependencies = allImplementDependencies.get(i);
 
             Row row = Imports.createRow(rowNumber++);
             Cell classNameCell = row.createCell(0);
-            classNameCell.setCellValue(i+1 + " " + className);
+            classNameCell.setCellValue(i+1 + " " + classNameOnHeader);
 
             CellStyle firstColumnStyle = ExcelAPI.setFirstColumnStyles(classNameCell);
             classNameCell.setCellStyle(firstColumnStyle);
@@ -65,13 +65,15 @@ public class DependencyWriter {
             Imports.autoSizeColumn(0);
 
             columnNumber = 1;
-            for (String className_ : allClassNames) {
+            //commitStats
+
+            for (String classNameOnColumn : allClassNames) {
                 Cell isDependantOrNotCell = row.createCell(columnNumber);
                 CellStyle cellStyleOfClassDependencies = ExcelAPI.setCellStyles(isDependantOrNotCell, rowNumber-1, columnNumber);
 
-                final int importDependenciesIndex = importDependencies.indexOf(className_);
-                final int extendDependenciesIndex = extendDependencies.indexOf(className_);
-                final int implementDependenciesIndex = implementDependencies.indexOf(className_);
+                final int importDependenciesIndex = importDependencies.indexOf(classNameOnColumn);
+                final int extendDependenciesIndex = extendDependencies.indexOf(classNameOnColumn);
+                final int implementDependenciesIndex = implementDependencies.indexOf(classNameOnColumn);
                 List<Integer> dependencyIndexes = Arrays.asList(importDependenciesIndex,extendDependenciesIndex,implementDependenciesIndex);
                 String cellValue = "";
                 for(int x=0; x<dependencyIndexes.size(); x++){
@@ -81,6 +83,13 @@ public class DependencyWriter {
                 }
                 if(!cellValue.equals(""))
                     cellValue = cellValue.substring(0, cellValue.length()-1);
+
+                if(!classNameOnColumn.equals(classNameOnHeader) &&
+                        commitStats.get(classNameOnColumn) != null &&
+                        commitStats.get(classNameOnColumn).get(classNameOnHeader) != null){
+                    cellValue = cellValue + "," + commitStats.get(classNameOnColumn).get(classNameOnHeader);
+                }
+
                 if(cellValue.equals(""))
                     cellValue = emptyCell;
                 Imports.autoSizeColumn(columnNumber);

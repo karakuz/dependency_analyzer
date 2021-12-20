@@ -41,15 +41,14 @@ public class ExcelAPI {
             extendDependencies.add(extendClassifier(classDependencies));
             implementDependencies.add(implementsClassifier(classDependencies));
 
-            //checkCyclicDependencies(className, importDependencies.get(importDependencies.size()-1));
+            checkCyclicDependencies(className, importDependencies.get(importDependencies.size()-1));
 
             allClasses.add(className);
         }
+        printCyclicDependencies();
 
 
-
-
-        writeAllDependencies(workbook, allClasses,
+        writeAllDependencies(workbook, allClasses, commitStats,
                 importDependencies,
                 extendDependencies,
                 implementDependencies);
