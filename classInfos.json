@@ -51,6 +51,56 @@
                 "com.test.credit_card.Visa",
                 "com.test.database.Database"
             ]
+        },
+        {
+            "commit_message": "commit 5th",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "com.test.account.Account",
+                "com.test.credit_card.Card",
+                "com.test.credit_card.CreditCard",
+                "com.test.credit_card.MasterCard",
+                "com.test.credit_card.Visa",
+                "com.test.database.Database",
+                "com.test.payment.Payment",
+                "com.test.store.Item",
+                "com.test.store.Store",
+                "com.test.user.User"
+            ]
+        },
+        {
+            "commit_message": "6th commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "com.test.credit_card.Card",
+                "com.test.payment.Payment",
+                "com.test.store.Item",
+                "com.test.store.Store",
+                "com.test.user.User"
+            ]
+        },
+        {
+            "commit_message": "7th commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "com.test.account.Account",
+                "com.test.credit_card.Card",
+                "com.test.database.Database",
+                "com.test.payment.Payment",
+                "com.test.store.Item",
+                "com.test.store.Store",
+                "com.test.user.User"
+            ]
+        },
+        {
+            "commit_message": "8th commit",
+            "committer": "31669352+karakuz@users.noreply.github.com",
+            "changes": [
+                "com.test.credit_card.Card",
+                "com.test.credit_card.MasterCard",
+                "com.test.store.Store",
+                "com.test.user.User"
+            ]
         }
     ]
 }
