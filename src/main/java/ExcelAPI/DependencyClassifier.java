@@ -8,7 +8,10 @@ import java.util.*;
 
 public class DependencyClassifier {
     private static final String[] forbiddenFileExtensions = {".java", ".javax"};
-    public static List<List<String>> cyclicDependencies = new ArrayList<>();
+    public static List<String> cyclicDependencies = new ArrayList<>();
+    public static List<List<String>> cyclicDependenciesList = new ArrayList<>();
+    public static List<String> cyclicDependenciesList_ = new ArrayList<>();
+    public static HashMap<String, List<String>> cyclicDependenciesMap = new HashMap<>();
     public static HashMap<String, HashMap<String, Integer>> commitStats = new HashMap<>();
 
     public static List<String> importClassifier(JsonObject classDependencies){
@@ -108,37 +111,66 @@ public class DependencyClassifier {
         }
     }
 
-    public static void checkCyclicDependencies(String className, List<String> importDependencies){
+    public static void findCyclicDependencies(){
+        Set<String> dependentClasses = cyclicDependenciesMap.keySet();
+        for(String className : dependentClasses){
+            for(String dependentOn : cyclicDependenciesMap.get(className)){
+                String chain = className + " -> " + dependentOn;
+                cyclicDependenciesList_.add(chain);
+            }
+        }
+        for(int x=0; x<dependentClasses.size(); x++){
+            for(int i=0; i<cyclicDependenciesList_.size(); i++){
+                String chain = cyclicDependenciesList_.get(i);
+                String[] splittedChain = chain.split(" -> ");
+                String className = splittedChain[0];
+                String lastDependency = splittedChain[splittedChain.length-1];
+                if(!dependentClasses.contains(lastDependency)){
+                    continue;
+                }
+                for(String dependentOn : cyclicDependenciesMap.get(lastDependency)){
+                    String newChain = chain + " -> " + dependentOn;
+
+                    if(className.equals(dependentOn)){
+                        cyclicDependenciesList_.remove(i);
+                        cyclicDependencies.add(cyclicDependencies.size(), newChain);
+                        if(i == cyclicDependenciesList_.size())
+                            break;
+                        continue;
+                    }
+                    if(!Arrays.asList(splittedChain).contains(dependentOn))
+                        cyclicDependenciesList_.set(i, newChain);
+                }
+            }
+        }
+    }
+
+    public static void putCyclicDependencies(String className, List<String> importDependencies){
         //System.out.println("className: "+ className + ", importDependencies: " + importDependencies);
+        if(importDependencies.size() == 0)
+            return;
+
+        cyclicDependenciesMap.put(className, importDependencies);
 
         for(String importDependency : importDependencies){
-            List<String> newDependencyChain = new ArrayList<>(Arrays.asList(className, importDependency));
-            cyclicDependencies.add(newDependencyChain);
+            List<String> newCyclicDependencyChain = new ArrayList<>(Arrays.asList(className, importDependency));
+            cyclicDependenciesList.add(newCyclicDependencyChain);
         }
-        /*List<String> lastClassNames = new ArrayList<>();
-        for(List<String> dependencyChain : cyclicDependencies) {
-            String lastClassName = dependencyChain.get(dependencyChain.size() - 1);
-            lastClassNames.add(lastClassName);
-        }
-        System.out.println("lastClassNames: " + lastClassNames);*/
-
-        //printCyclicDependencies();
     }
 
-
+    public static void printCyclicDependenciesList_(){
+        System.out.println("[");
+        for(String str : cyclicDependenciesList_)
+            System.out.println("\t" + str + ",");
+        System.out.println("]");
+    }
 
     public static void printCyclicDependencies(){
-        for(List<String> innerList : cyclicDependencies){
-            String temp = "";
-            for(String className_ : innerList)
-                temp = temp + className_.substring(className_.lastIndexOf('.')+1) + " -> ";
-            System.out.println("\t" + temp.substring(0,temp.length()-4));
-        }
-        System.out.println("");
+        System.out.println("cyclicDependencies: ");
+        System.out.println("[");
+        for(String str : cyclicDependencies)
+            System.out.println("\t" + str + ",");
+        System.out.println("]");
     }
 
-    public static void printCommitStats(){
-        //HashMap<String, HashMap<String, Integer>>
-
-    }
 }

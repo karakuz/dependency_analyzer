@@ -1,6 +1,7 @@
 package ExcelAPI;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.eclipsesource.json.*;
@@ -41,19 +42,43 @@ public class ExcelAPI {
             extendDependencies.add(extendClassifier(classDependencies));
             implementDependencies.add(implementsClassifier(classDependencies));
 
-            checkCyclicDependencies(className, importDependencies.get(importDependencies.size()-1));
+            putCyclicDependencies(className, importDependencies.get(importDependencies.size()-1));
 
             allClasses.add(className);
         }
-        printCyclicDependencies();
+        findCyclicDependencies();
+
+        for(int i=0; i<cyclicDependencies.size(); i++){
+            String chain = cyclicDependencies.get(i);
+            String[] splittedChain = chain.split(" -> ");
+
+            String newChain = "";
+            for(int y=0; y<splittedChain.length-1; y++)
+                newChain += splittedChain[y] + " -> ";
+            newChain = newChain.substring(0, newChain.length()-4);
+            cyclicDependencies.set(i, newChain);
+        }
+        //printCyclicDependencies();
 
 
-        writeAllDependencies(workbook, allClasses, commitStats,
+        writeAllDependencies(workbook, allClasses, cyclicDependencies, commitStats,
                 importDependencies,
                 extendDependencies,
-                implementDependencies);
+                implementDependencies,
+                cyclicDependenciesList);
 
         return workbook;
+    }
+
+    public static List<String> getCyclicToClasses(String className, List<String> allCyclicDependencies){
+        List<String> cyclicToClasses = new ArrayList<>();
+        for(String cyclicChain : allCyclicDependencies){
+            String[] splittedCyclicChain = cyclicChain.split(" -> ");
+            if(splittedCyclicChain[0].equals(className))
+                for(int i=1; i<splittedCyclicChain.length; i++)
+                    cyclicToClasses.add(splittedCyclicChain[i]);
+        }
+        return cyclicToClasses;
     }
 
     public static CellStyle setTableHeaderStyles(CellStyle tableCellStyle){
@@ -78,7 +103,7 @@ public class ExcelAPI {
         return cellStyle;
     }
 
-    public static CellStyle setCellStyles(Cell cell, int rowNumber, int columnNumber){
+    public static CellStyle setCellStyleOfClassDependencies(Cell cell, int rowNumber, int columnNumber){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setBorderTop(BorderStyle.MEDIUM);
@@ -103,6 +128,22 @@ public class ExcelAPI {
         return cellStyle;
     }
 
+    public static CellStyle setCyclicCellStyle(Cell cell){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+
+        cellStyle.setBorderTop(BorderStyle.THICK);
+        cellStyle.setTopBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderRight(BorderStyle.THICK);
+        cellStyle.setRightBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderBottom(BorderStyle.THICK);
+        cellStyle.setBottomBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderLeft(BorderStyle.THICK);
+        cellStyle.setLeftBorderColor(IndexedColors.RED.getIndex());
+
+        return cellStyle;
+    }
+
+
     public static XSSFFont setTableHeaderFont(XSSFFont tableHeaderFont){
         tableHeaderFont.setFontName("Arial");
         tableHeaderFont.setFontHeightInPoints((short) 10);
@@ -119,7 +160,7 @@ public class ExcelAPI {
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         workbook.write(outputStream);
 
-        System.out.println("\nTest Worksheet is saved to -> " + fileLocation);
+        System.out.println("\nDependency Table is saved to -> " + fileLocation);
         workbook.close();
     }
 }

@@ -45,8 +45,6 @@ public class Main {
             List<String> imports_ = new ArrayList<>();
             List<String> packageName = new ArrayList<>();
 
-            JsonObject classInfo = Json.object();
-
             VoidVisitor<List<String>> classNamesVisitor = new ClassNamesVisitor();
             classNamesVisitor.visit(cu, className_);
             String className = (className_.size() > 0) ? className_.get(0) : null;
@@ -154,6 +152,7 @@ public class Main {
         json.add("classes", classes);
         String jsonStr = json.toString(WriterConfig.PRETTY_PRINT);
         //System.out.println(jsonStr);
+        //System.exit(1);
         String[] className = classes.names().toArray(new String[0]);
         //System.out.println(className[0]);
         JsonObject aa = json.asObject().get("classes").asObject();

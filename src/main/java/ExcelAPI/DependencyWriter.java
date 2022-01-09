@@ -1,6 +1,5 @@
 package ExcelAPI;
 
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,7 +17,7 @@ public class DependencyWriter {
         return dependencyNames;
     };
 
-    public static Workbook writeAllDependencies(Workbook workbook, List<String> allClasses, HashMap<String, HashMap<String,Integer>> commitStats, List<List<String>>... dependenciesList){
+    public static Workbook writeAllDependencies(Workbook workbook, List<String> allClasses, List<String> cyclicDependencies, HashMap<String, HashMap<String,Integer>> commitStats, List<List<String>>... dependenciesList){
         HashMap<Integer, String> dependencyNames = getDependencyNames();
 
         Sheet Imports = workbook.createSheet("Dependencies");
@@ -34,6 +33,7 @@ public class DependencyWriter {
 
         ArrayList<String> allClassesNames = new ArrayList<>(allClasses);
 
+        //A0,A1,A1....AX
         int columnNumber = 1;
         for(int i=0; i<allClassesNames.size(); i++){
             Cell headerCell = firstRowOfClassDependencies.createCell(columnNumber++);
@@ -47,17 +47,34 @@ public class DependencyWriter {
         List<List<String>> allImportDependencies = dependenciesList[0];
         List<List<String>> allExtendDependencies = dependenciesList[1];
         List<List<String>> allImplementDependencies = dependenciesList[2];
+        List<String> allCyclicDependencies = cyclicDependencies;
+
+        /*Set<String> allCyclicDependencies = new HashSet<>();
+        for(List<String> cyclicDependencyChain : dependenciesList[3]){
+            for(String className : cyclicDependencyChain){
+                allCyclicDependencies.add(className);
+            }
+        }*/
+
+        /*System.out.println("allCyclicDependencies: ");
+        System.out.println(allCyclicDependencies);*/
+        /*System.out.println("allImportDependencies: ");
+        System.out.println(allImportDependencies);
+        System.out.println("allExtendDependencies: ");
+        System.out.println(allExtendDependencies);*/
 
         int rowNumber = 1;
         for(int i=0; i<allClassNames.size(); i++){
-            String classNameOnHeader = allClassNames.get(i);
+            String classNameOnRow = allClassNames.get(i);
             List<String> importDependencies = allImportDependencies.get(i);
             List<String> extendDependencies = allExtendDependencies.get(i);
             List<String> implementDependencies = allImplementDependencies.get(i);
 
+            List<String> cyclicTo = ExcelAPI.getCyclicToClasses(classNameOnRow, allCyclicDependencies);
+
             Row row = Imports.createRow(rowNumber++);
             Cell classNameCell = row.createCell(0);
-            classNameCell.setCellValue(i+1 + " " + classNameOnHeader);
+            classNameCell.setCellValue(i+1 + " " + classNameOnRow);
 
             CellStyle firstColumnStyle = ExcelAPI.setFirstColumnStyles(classNameCell);
             classNameCell.setCellStyle(firstColumnStyle);
@@ -69,35 +86,42 @@ public class DependencyWriter {
 
             for (String classNameOnColumn : allClassNames) {
                 Cell isDependantOrNotCell = row.createCell(columnNumber);
-                CellStyle cellStyleOfClassDependencies = ExcelAPI.setCellStyles(isDependantOrNotCell, rowNumber-1, columnNumber);
+                CellStyle cellStyleOfClassDependencies = ExcelAPI.setCellStyleOfClassDependencies(isDependantOrNotCell, rowNumber-1, columnNumber);
 
                 final int importDependenciesIndex = importDependencies.indexOf(classNameOnColumn);
                 final int extendDependenciesIndex = extendDependencies.indexOf(classNameOnColumn);
                 final int implementDependenciesIndex = implementDependencies.indexOf(classNameOnColumn);
                 List<Integer> dependencyIndexes = Arrays.asList(importDependenciesIndex,extendDependenciesIndex,implementDependenciesIndex);
+
                 String cellValue = "";
                 for(int x=0; x<dependencyIndexes.size(); x++){
                     int index = dependencyIndexes.get(x);
                     if(index != -1)
                         cellValue += dependencyNames.get(x) + ",";
                 }
+
                 if(!cellValue.equals(""))
                     cellValue = cellValue.substring(0, cellValue.length()-1);
 
-                if(!classNameOnColumn.equals(classNameOnHeader) &&
+                if(!classNameOnColumn.equals(classNameOnRow) &&
                         commitStats.get(classNameOnColumn) != null &&
-                        commitStats.get(classNameOnColumn).get(classNameOnHeader) != null){
-                    cellValue = cellValue + "," + commitStats.get(classNameOnColumn).get(classNameOnHeader);
+                        commitStats.get(classNameOnColumn).get(classNameOnRow) != null){
+                    cellValue = cellValue + "," + commitStats.get(classNameOnColumn).get(classNameOnRow);
                 }
 
                 if(cellValue.equals(""))
                     cellValue = emptyCell;
                 Imports.autoSizeColumn(columnNumber);
                 isDependantOrNotCell.setCellValue(cellValue);
-                isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);
+                if(cyclicTo.contains(classNameOnColumn))
+                    isDependantOrNotCell.setCellStyle(ExcelAPI.setCyclicCellStyle(isDependantOrNotCell));
+                else
+                    isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);
+
                 Imports.autoSizeColumn(columnNumber++);
             }
         }
+
         for(int a =1;a <= allClassNames.size();a++){
             int count =0;
             int rowIndex = 0;
@@ -117,7 +141,6 @@ public class DependencyWriter {
                     }
                 }
             }
-
         }
 
         return workbook;
