@@ -4,7 +4,6 @@ import json
 
 JSON = json.load(open('../../../../classInfos.json'))
 githubURL = JSON["githubURL"]
-classInfos = JSON["classes"]
 
 commits = []
 for commit in Repository(githubURL, only_modifications_with_file_types=['.java']).traverse_commits():
@@ -22,14 +21,11 @@ for commit in Repository(githubURL, only_modifications_with_file_types=['.java']
         "committer": commit.author.email,
         "changes": changes
     }
-
-    hash = commit.hash
     commits.append(commitObj)
 
-commits_ = json.dumps({"commits": commits})
-print(commits_)
+#commits_ = json.dumps({"commits": commits})
+#print(commits_)
 
-print(classInfos)
 
 with open('../../../../classInfos.json', 'w', encoding='utf-8') as f:
-    json.dump({"classes": classInfos, "commits": commits}, f, ensure_ascii=False, indent=4)
+    json.dump({"githubURL": githubURL, "commits": commits}, f, ensure_ascii=False, indent=4)

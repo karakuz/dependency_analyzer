@@ -81,7 +81,7 @@ public class ExcelAPI {
         return cyclicToClasses;
     }
 
-    public static CellStyle setTableHeaderStyles(CellStyle tableCellStyle){
+    public static CellStyle getTableHeaderStyle(CellStyle tableCellStyle){
         tableCellStyle.setAlignment(HorizontalAlignment.CENTER);
         tableCellStyle.setBorderTop(BorderStyle.MEDIUM);
         tableCellStyle.setBorderRight(BorderStyle.MEDIUM);
@@ -90,9 +90,11 @@ public class ExcelAPI {
         
         return tableCellStyle;
     }
-    public static CellStyle setColoredHeaderStyles(Cell cell){
+    public static CellStyle getManyDependentHeaderStyle(Cell cell, boolean isFirstRow){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        cellStyle.setAlignment((isFirstRow) ? HorizontalAlignment.CENTER : HorizontalAlignment.LEFT);
+
         cellStyle.setBorderTop(BorderStyle.MEDIUM);
         cellStyle.setBorderRight(BorderStyle.MEDIUM);
         cellStyle.setBorderBottom(BorderStyle.MEDIUM);
@@ -103,7 +105,7 @@ public class ExcelAPI {
         return cellStyle;
     }
 
-    public static CellStyle setCellStyleOfClassDependencies(Cell cell, int rowNumber, int columnNumber){
+    public static CellStyle getCellStyleOfClassDependencies(Cell cell, int rowNumber, int columnNumber){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setBorderTop(BorderStyle.MEDIUM);
@@ -117,7 +119,7 @@ public class ExcelAPI {
         return cellStyle;
     }
 
-    public static CellStyle setFirstColumnStyles(Cell cell){
+    public static CellStyle getFirstColumnStyles(Cell cell){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.LEFT);
         cellStyle.setBorderTop(BorderStyle.MEDIUM);
@@ -128,9 +130,10 @@ public class ExcelAPI {
         return cellStyle;
     }
 
-    public static CellStyle setCyclicCellStyle(Cell cell){
+    public static CellStyle getCyclicCellStyle(Cell cell){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
 
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setBorderTop(BorderStyle.THICK);
         cellStyle.setTopBorderColor(IndexedColors.RED.getIndex());
         cellStyle.setBorderRight(BorderStyle.THICK);
@@ -143,8 +146,7 @@ public class ExcelAPI {
         return cellStyle;
     }
 
-
-    public static XSSFFont setTableHeaderFont(XSSFFont tableHeaderFont){
+    public static XSSFFont getTableHeaderFont(XSSFFont tableHeaderFont){
         tableHeaderFont.setFontName("Arial");
         tableHeaderFont.setFontHeightInPoints((short) 10);
         tableHeaderFont.setBold(true);

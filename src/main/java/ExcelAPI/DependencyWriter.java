@@ -23,10 +23,10 @@ public class DependencyWriter {
         Sheet Imports = workbook.createSheet("Dependencies");
 
         CellStyle tableHeaderStyleOfClassDependencies = workbook.createCellStyle();
-        ExcelAPI.setTableHeaderStyles(tableHeaderStyleOfClassDependencies);
+        ExcelAPI.getTableHeaderStyle(tableHeaderStyleOfClassDependencies);
 
         XSSFFont classDependenciesHeaderFont = ((XSSFWorkbook) workbook).createFont();
-        ExcelAPI.setTableHeaderFont(classDependenciesHeaderFont);
+        ExcelAPI.getTableHeaderFont(classDependenciesHeaderFont);
         tableHeaderStyleOfClassDependencies.setFont(classDependenciesHeaderFont);
 
         Row firstRowOfClassDependencies = Imports.createRow(0);
@@ -76,7 +76,7 @@ public class DependencyWriter {
             Cell classNameCell = row.createCell(0);
             classNameCell.setCellValue(i+1 + " " + classNameOnRow);
 
-            CellStyle firstColumnStyle = ExcelAPI.setFirstColumnStyles(classNameCell);
+            CellStyle firstColumnStyle = ExcelAPI.getFirstColumnStyles(classNameCell);
             classNameCell.setCellStyle(firstColumnStyle);
             firstColumnStyle.setFont(classDependenciesHeaderFont);
             Imports.autoSizeColumn(0);
@@ -86,7 +86,7 @@ public class DependencyWriter {
 
             for (String classNameOnColumn : allClassNames) {
                 Cell isDependantOrNotCell = row.createCell(columnNumber);
-                CellStyle cellStyleOfClassDependencies = ExcelAPI.setCellStyleOfClassDependencies(isDependantOrNotCell, rowNumber-1, columnNumber);
+                CellStyle cellStyleOfClassDependencies = ExcelAPI.getCellStyleOfClassDependencies(isDependantOrNotCell, rowNumber-1, columnNumber);
 
                 final int importDependenciesIndex = importDependencies.indexOf(classNameOnColumn);
                 final int extendDependenciesIndex = extendDependencies.indexOf(classNameOnColumn);
@@ -114,7 +114,7 @@ public class DependencyWriter {
                 Imports.autoSizeColumn(columnNumber);
                 isDependantOrNotCell.setCellValue(cellValue);
                 if(cyclicTo.contains(classNameOnColumn))
-                    isDependantOrNotCell.setCellStyle(ExcelAPI.setCyclicCellStyle(isDependantOrNotCell));
+                    isDependantOrNotCell.setCellStyle(ExcelAPI.getCyclicCellStyle(isDependantOrNotCell));
                 else
                     isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);
 
@@ -122,7 +122,7 @@ public class DependencyWriter {
             }
         }
 
-        for(int a =1;a <= allClassNames.size();a++){
+        for(int a=1;a <= allClassNames.size();a++){
             int count =0;
             int rowIndex = 0;
             firstRowOfClassDependencies = Imports.getRow(rowIndex);
@@ -132,15 +132,34 @@ public class DependencyWriter {
                 firstRowOfClassDependencies = Imports.getRow(rowIndex);
                 if (firstRowOfClassDependencies != null) {
                     Cell cell = firstRowOfClassDependencies.getCell(a);
-                    if (cell.getStringCellValue() != emptyCell && !cell.getStringCellValue().substring(0,1).equals(",")) {
+                    if (cell.getStringCellValue() != emptyCell && !cell.getStringCellValue().substring(0,1).equals(","))
                         count++;
-                    }
-                    if(count>=Imports.getLastRowNum()/2){
-                        CellStyle colored = ExcelAPI.setColoredHeaderStyles(head);
-                        head.setCellStyle(colored);
+                    if(count >= Imports.getLastRowNum()/2){
+                        CellStyle firstRowManyDependentStyle = ExcelAPI.getManyDependentHeaderStyle(head, true);
+                        CellStyle firstColumnManyDependentStyle = ExcelAPI.getManyDependentHeaderStyle(head, false);
+                        workbook.getSheetAt(0).getRow(a).getCell(0).setCellStyle(firstColumnManyDependentStyle);
+                        head.setCellStyle(firstRowManyDependentStyle);
                     }
                 }
             }
+        }
+
+        int rightMostColumn = allClassNames.size()+2;
+        final int middleRow = workbook.getSheetAt(0).getLastRowNum()/2;
+
+        String[] legend = {"Cyclic Dependency","Unhealthy Inheritance"};
+
+
+        for(String legendName : legend){
+            System.out.println("legendName: " + legendName);
+            Cell legendCell = workbook.getSheetAt(0).getRow(middleRow).createCell(rightMostColumn);
+            legendCell.setCellValue(legendName);
+
+            if(legendName.equals("Cyclic Dependency"))
+                legendCell.setCellStyle(ExcelAPI.getCyclicCellStyle(legendCell));
+            else if(legendName.equals("Unhealthy Inheritance"))
+                legendCell.setCellStyle(ExcelAPI.getManyDependentHeaderStyle(legendCell, true));
+            Imports.autoSizeColumn(rightMostColumn++);
         }
 
         return workbook;
