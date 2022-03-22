@@ -1,5 +1,6 @@
 package ExcelAPI;
 
+import org.apache.poi.hpsf.Array;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -121,7 +122,7 @@ public class DependencyWriter {
                 Imports.autoSizeColumn(columnNumber++);
             }
         }
-
+        int[] data = new int[allClassNames.size()];
         for(int a=1;a <= allClassNames.size();a++){
             int count =0;
             int rowIndex = 0;
@@ -134,7 +135,63 @@ public class DependencyWriter {
                     Cell cell = firstRowOfClassDependencies.getCell(a);
                     if (cell.getStringCellValue() != emptyCell && !cell.getStringCellValue().substring(0,1).equals(","))
                         count++;
-                    if(count >= Imports.getLastRowNum()/2){
+                }
+            }
+            data[a-1] = count;
+        }
+        //Creating Quartiles here
+        int pos;
+        int temp;
+        for (int i = 0; i < data.length; i++)
+        {
+            pos = i;
+            for (int j = i+1; j < data.length; j++)
+            {
+                if (data[j] < data[pos])                  //find the index of the minimum element
+                {
+                    pos = j;
+                }
+            }
+
+            temp = data[pos];            //swap the current element with the minimum element
+            data[pos] = data[i];
+            data[i] = temp;
+        }
+        data = new int[]{0, 0, 0, 1, 1, 1, 1, 5, 5, 6};
+        double q1;
+        double q3;
+        double q2;
+        double upper_bound;
+        if(data.length%2 == 0){
+            q1 = (data[(data.length) * 25 / 100] + data[((data.length) * 25 / 100) - 1]) / 2.0;
+            q3 = (data[(data.length)*75/100] + data[((data.length)*75/100)-1])/2.0;
+            System.out.println(q1);
+            q2 = q3-q1;
+            upper_bound = q3+(1.5*q2);
+        }else{
+            q1 = data[(data.length)*25/100];
+            q3 = data[(data.length)*75/100];
+            q2 = q3-q1;
+            upper_bound = q3+(1.5*q2);
+        }
+
+        System.out.println(q3);
+        System.out.println(upper_bound);
+        //End Quartiles
+        //Color With Outliers
+        for(int a=1;a <= allClassNames.size();a++){
+            int count =0;
+            int rowIndex = 0;
+            firstRowOfClassDependencies = Imports.getRow(rowIndex);
+            Cell head = firstRowOfClassDependencies.getCell(a);
+
+            for ( rowIndex = 1; rowIndex <= allClassNames.size(); rowIndex++) {
+                firstRowOfClassDependencies = Imports.getRow(rowIndex);
+                if (firstRowOfClassDependencies != null) {
+                    Cell cell = firstRowOfClassDependencies.getCell(a);
+                    if (cell.getStringCellValue() != emptyCell && !cell.getStringCellValue().substring(0,1).equals(","))
+                        count++;
+                    if(count >= upper_bound){
                         CellStyle firstRowManyDependentStyle = ExcelAPI.getManyDependentHeaderStyle(head, true);
                         CellStyle firstColumnManyDependentStyle = ExcelAPI.getManyDependentHeaderStyle(head, false);
                         workbook.getSheetAt(0).getRow(a).getCell(0).setCellStyle(firstColumnManyDependentStyle);
@@ -142,7 +199,9 @@ public class DependencyWriter {
                     }
                 }
             }
+            data[a-1] = count;
         }
+        //Color End
 
         int rightMostColumn = allClassNames.size()+2;
         final int middleRow = workbook.getSheetAt(0).getLastRowNum()/2;
