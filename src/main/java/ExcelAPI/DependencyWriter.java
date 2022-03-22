@@ -151,7 +151,7 @@ public class DependencyWriter {
 
 
         for(String legendName : legend){
-            System.out.println("legendName: " + legendName);
+            //System.out.println("legendName: " + legendName);
             Cell legendCell = workbook.getSheetAt(0).getRow(middleRow).createCell(rightMostColumn);
             legendCell.setCellValue(legendName);
 

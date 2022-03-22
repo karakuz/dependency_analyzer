@@ -9,8 +9,9 @@ public class ClassExtendsVisitor extends VoidVisitorAdapter<List<String>> {
     @Override
     public void visit(ClassOrInterfaceDeclaration md, List<String> extends_) {
         super.visit(md, extends_);
-        if(md.getExtendedTypes().size() > 0){
+
+
+        if(md.getExtendedTypes().size() > 0)
             extends_.add(md.getExtendedTypes().get(0).toString());
-        }
     }
 }

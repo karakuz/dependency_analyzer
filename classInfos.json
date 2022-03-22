@@ -1,105 +1,25 @@
 {
-    "githubURL": "https://github.com/karakuz/Test-Project",
+    "githubURL": "https://github.com/shouryaj98/Hotel-Management-Project-Java",
     "commits": [
         {
-            "commit_message": "first commit",
-            "committer": "31669352+karakuz@users.noreply.github.com",
+            "commit_message": "First",
+            "committer": "shouryaj98@github.com",
             "changes": [
-                "com.test.Main",
-                "com.test.account.Account",
-                "com.test.account.UserType",
-                "com.test.database.Database",
-                "com.test.store.Store",
-                "com.test.user.User"
+                "Project"
             ]
         },
         {
-            "commit_message": "second commit",
-            "committer": "31669352+karakuz@users.noreply.github.com",
+            "commit_message": "Branch2 (#2)\n\nSet variable names of hotel objects and rent amount\r\nCo-authored-by: C Anusha <canusha@Cs-MacBook-Pro.local>",
+            "committer": "43090684+anushac07@users.noreply.github.com",
             "changes": [
-                "com.test.Main",
-                "com.test.account.Account",
-                "com.test.credit_card.Card",
-                "com.test.credit_card.CreditCard",
-                "com.test.credit_card.MasterCard",
-                "com.test.credit_card.Visa",
-                "com.test.database.Database",
-                "com.test.payment.Payment",
-                "com.test.store.Item",
-                "com.test.store.Store",
-                "com.test.user.User"
+                "Project"
             ]
         },
         {
-            "commit_message": "3rd commit",
-            "committer": "31669352+karakuz@users.noreply.github.com",
+            "commit_message": "Update and rename Project.java to Main.java",
+            "committer": "shourya98@gmail.com",
             "changes": [
-                "com.test.account.Account",
-                "com.test.credit_card.Card",
-                "com.test.credit_card.MasterCard",
-                "com.test.payment.Payment",
-                "com.test.store.Store"
-            ]
-        },
-        {
-            "commit_message": "4th commit",
-            "committer": "31669352+karakuz@users.noreply.github.com",
-            "changes": [
-                "com.test.credit_card.Card",
-                "com.test.credit_card.CreditCard",
-                "com.test.credit_card.MasterCard",
-                "com.test.credit_card.Visa",
-                "com.test.database.Database"
-            ]
-        },
-        {
-            "commit_message": "commit 5th",
-            "committer": "31669352+karakuz@users.noreply.github.com",
-            "changes": [
-                "com.test.account.Account",
-                "com.test.credit_card.Card",
-                "com.test.credit_card.CreditCard",
-                "com.test.credit_card.MasterCard",
-                "com.test.credit_card.Visa",
-                "com.test.database.Database",
-                "com.test.payment.Payment",
-                "com.test.store.Item",
-                "com.test.store.Store",
-                "com.test.user.User"
-            ]
-        },
-        {
-            "commit_message": "6th commit",
-            "committer": "31669352+karakuz@users.noreply.github.com",
-            "changes": [
-                "com.test.credit_card.Card",
-                "com.test.payment.Payment",
-                "com.test.store.Item",
-                "com.test.store.Store",
-                "com.test.user.User"
-            ]
-        },
-        {
-            "commit_message": "7th commit",
-            "committer": "31669352+karakuz@users.noreply.github.com",
-            "changes": [
-                "com.test.account.Account",
-                "com.test.credit_card.Card",
-                "com.test.database.Database",
-                "com.test.payment.Payment",
-                "com.test.store.Item",
-                "com.test.store.Store",
-                "com.test.user.User"
-            ]
-        },
-        {
-            "commit_message": "8th commit",
-            "committer": "31669352+karakuz@users.noreply.github.com",
-            "changes": [
-                "com.test.credit_card.Card",
-                "com.test.credit_card.MasterCard",
-                "com.test.store.Store",
-                "com.test.user.User"
+                "Main"
             ]
         }
     ]

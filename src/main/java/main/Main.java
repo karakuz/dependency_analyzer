@@ -14,7 +14,12 @@ import java.util.*;
 
 public class Main {
     private static final String ROOT = System.getProperty("user.dir") + "\\";
-    private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\src";
+    private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\project1";
+    //private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\project2";
+
+    public static void exit_(){
+        System.exit(1);
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -26,144 +31,94 @@ public class Main {
             javaFileLocationsAsList.addAll(javaFilesInDirectory);
         Set<String> javaFileLocations = new HashSet<>(javaFileLocationsAsList);
 
+        //System.out.println(javaFileLocations);
 
-        //List<List<String>> allImports = new ArrayList<>();
-        List<String> classNames = new ArrayList<>();
-
-        //Map classes = new LinkedHashMap();
         JsonObject json = Json.object();
         JsonObject classes = Json.object();
 
+        List<String> classNames = new ArrayList<>();
         for(String javaFileLocation : javaFileLocations){
             CompilationUnit cu = StaticJavaParser.parse(new File(ROOT + PROJECT_FILE_PATH + javaFileLocation));
 
-            List<String> className_ = new ArrayList<>();
+            List<String> classDataList = new ArrayList<>();
             List<String> extends_ = new ArrayList<>();
-            List<String> implements_ = new ArrayList<>();
-            List<String> methodNames = new ArrayList<>();
-            List<String> methodCalls = new ArrayList<>();
-            List<String> imports_ = new ArrayList<>();
             List<String> packageName = new ArrayList<>();
+            List<String> imports_ = new ArrayList<>();
 
-            VoidVisitor<List<String>> classNamesVisitor = new ClassNamesVisitor();
-            classNamesVisitor.visit(cu, className_);
-            String className = (className_.size() > 0) ? className_.get(0) : null;
-            if(className == null || className.equals("Main"))
-                continue;
-            //System.out.println("javaFileLocation: " + javaFileLocation);
-            String directory = javaFileLocation.substring(0,javaFileLocation.lastIndexOf('\\') + 1);
-            //System.out.println("directory: " + directory);
-            //System.out.println("\tClass Name: " + className);
+            String directory = javaFileLocation.substring(0, javaFileLocation.lastIndexOf('\\') + 1);
+            System.out.println("javaFileLocation: " + javaFileLocation + ", directory: " + directory);
 
+            JsonArray importsArray = null;
+            {
+                VoidVisitor<List<String>> classNamesVisitor = new ClassNamesVisitor();
+                classNamesVisitor.visit(cu, classDataList);
 
-            VoidVisitor<List<String>> packageDeclarationVisitor = new PackageDeclarationVisitor();
-            packageDeclarationVisitor.visit(cu, packageName);
+                VoidVisitor<List<String>> packageDeclarationVisitor = new PackageDeclarationVisitor();
+                packageDeclarationVisitor.visit(cu, packageName);
 
-            String foundClassName = packageName.get(0) + "." + className;
-            classNames.add(foundClassName);
-            classes.add(foundClassName, Json.object());
-
-            VoidVisitor<List<String>> importDeclarationVisitor = new ImportDeclarationVisitor();
-            importDeclarationVisitor.visit(cu, imports_);
-
-            //System.out.println("\t\timportsAsArray: " + imports_);
-            JsonArray importsArray = Json.array(imports_.toArray(String[]::new));
-            JsonObject classInfos = Json.object();
-
-
-            VoidVisitor<List<String>> classExtendsVisitor = new ClassExtendsVisitor();
-            classExtendsVisitor.visit(cu, extends_);
-
-            String[] extends__ = extends_.toArray(String[]::new);
-            if(extends__.length > 0){
-                boolean isExtendedClassImported = false;
-                for(String imports : imports_){
-                    final int lastPackageIndex = imports.lastIndexOf('.') + 1;
-                    String importClassName = imports.substring(lastPackageIndex);
-                    if(extends__[0].equals(importClassName)){
-                        extends__[0] = imports;
-                        isExtendedClassImported = true;
-                        break;
-                    }
-                }
-                if(!isExtendedClassImported)
-                    extends__[0] = directory.replaceAll("\\\\", ".").substring(1) + extends__[0];
+                VoidVisitor<List<String>> importDeclarationVisitor = new ImportDeclarationVisitor();
+                importDeclarationVisitor.visit(cu, imports_);
+                importsArray = Json.array(imports_.toArray(String[]::new));
             }
-            JsonArray extendsArray = Json.array(extends__);
+
+            System.out.println(classDataList);
+            System.out.println("");
+
+            for(String classData: classDataList){
+                String[] classDataStr = classData.split("\\|");//System.out.println(Arrays.toString(classDataStr));
+                JsonObject classInfos = Json.object();
+
+                List<String> implements_ = new ArrayList<>();
 
 
-            VoidVisitor<List<String>> classImplementsVisitor = new ClassImplementsVisitor();
-            classImplementsVisitor.visit(cu, implements_);
-            //System.out.println("\t\timplementsAsArray: " + implements_);
-            String[] implements__ = implements_.toArray(String[]::new);
-            if(implements__.length > 0){
-                int implementsIndex = 0;
-                for(String implementsName : implements__){
-                    boolean isImplementedClassImported = false;
-                    for(String imports : imports_){
-                        final int lastPackageIndex = imports.lastIndexOf('.') + 1;
-                        String importClassName = imports.substring(lastPackageIndex);
-                        if(implementsName.equals(importClassName)){
-                            isImplementedClassImported = true;
-                            implements__[implementsIndex] = imports;
-                            break;
-                        }
-                    }
-                    if(!isImplementedClassImported)
-                        implements__[implementsIndex] = directory.replaceAll("\\\\", ".").substring(1) + implements__[implementsIndex];
-                    implementsIndex++;
+                String className = classDataStr[0];
+                if(className.equals("Main"))
+                    continue;
+                className = (packageName.size() > 0) ? packageName.get(0) + "." + className : className;
+                classNames.add(className);
+                System.out.println("className: " + className);
+
+
+                String allExtends = classDataStr[1];
+                if(allExtends.equals("_"))
+                    allExtends = "";
+                allExtends = Extracter.extendsExtracter(allExtends, imports_, directory);
+                JsonArray extendsArray = (!allExtends.equals("")) ? Json.array(allExtends) : Json.array();
+                System.out.println("\tallExtends: " + allExtends);
+
+
+                String[] allImplementsArray = classDataStr[2].split(",");
+                for(String classImplements : allImplementsArray){
+                    if(!classImplements.equals("_"))
+                        implements_.add(classImplements);
+                    System.out.println("\tclassImplements: " + classImplements);
                 }
+                String[] allImplements = (implements_.size() > 0) ? Extracter.implementsExtracter(implements_, imports_, directory) : new String[]{};
+                JsonArray implementsArray = Json.array(allImplements);
+
+                classInfos
+                        .add("imports", importsArray)
+                        .add("extends", extendsArray)
+                        .add("implements", implementsArray);
+
+                System.out.println("endofloop className: " + className);
+                if(!className.equals(""))
+                    classes.set(className, classInfos);
             }
-            JsonArray implementsArray = Json.array(implements__);
-
-
-            classInfos
-                    .add("imports", importsArray)
-                    .add("extends", extendsArray)
-                    .add("implements", implementsArray);
-
-            classes.set(foundClassName, classInfos);
-
-            /*VoidVisitor<Void> variableDeclarationExprVisitor = new VariableDeclerationExprVisitor();
-            variableDeclarationExprVisitor.visit(cu, null);
-
-            VoidVisitor<Void> objectCreationExprVisitor = new ObjectCreationExprVisitor();
-            objectCreationExprVisitor.visit(cu, null);
-
-            VoidVisitor<Void> fieldVisitor = new FieldVisitor();
-            fieldVisitor.visit(cu, null);
-
-            VoidVisitor<List<String>> methodVisitor = new MethodVisitor();
-            methodVisitor.visit(cu, methodNames);*/
-            //methodNames.forEach(n -> System.out.println("Method Name Collected: " + n));
-
-            /*TypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(new File(PROJECT_FILE_PATH + "\\com\\test\\store")));
-            JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
-            StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);*/
-
-            /*VoidVisitor<Void> methodCallVisitor = new MethodCallVisitor();
-            methodCallVisitor.visit(cu, null);*/
-
-
-            //System.out.println("");
-            //allImports.add(imports_);
         }
-
         json.add("classes", classes);
         String jsonStr = json.toString(WriterConfig.PRETTY_PRINT);
-        //System.out.println(jsonStr);
-        //System.exit(1);
+        System.out.println(jsonStr);
+        //exit_();
+
         String[] className = classes.names().toArray(new String[0]);
         //System.out.println(className[0]);
+
         JsonObject aa = json.asObject().get("classes").asObject();
         //System.out.println(aa.get(className[0]));
-
-
 
         Workbook workbook = ExcelAPI.createWorkbook();
         workbook = ExcelAPI.writeDependencies(workbook, json);
         ExcelAPI.saveWorksheet(workbook);
-
-
     }
 }
