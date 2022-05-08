@@ -21,11 +21,12 @@ public class ExcelAPI {
         String projectPath = System.getProperty("user.dir");
         Reader reader = new FileReader(projectPath + "\\classInfos.json");
         JsonValue value = Json.parse(reader);
+        System.out.println("IN writeDependencies");
 
         JsonObject classes = json.asObject().get("classes").asObject();
         JsonValue commits = value.asObject().get("commits");
         commitClassifier(commits);
-
+        System.out.println("AFTER commitClassifier");
 
         List<List<String>> importDependencies = new ArrayList<>();
         List<List<String>> extendDependencies = new ArrayList<>();
@@ -47,6 +48,7 @@ public class ExcelAPI {
             allClasses.add(className);
         }
         findCyclicDependencies();
+        System.out.println("AFTER findCyclicDependencies");
 
         for(int i=0; i<cyclicDependencies.size(); i++){
             String chain = cyclicDependencies.get(i);
@@ -60,7 +62,7 @@ public class ExcelAPI {
         }
         //printCyclicDependencies();
 
-
+        System.out.println("BEFORE writeAllDependencies");
         writeAllDependencies(workbook, allClasses, cyclicDependencies, commitStats,
                 importDependencies,
                 extendDependencies,

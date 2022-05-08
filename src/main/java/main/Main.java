@@ -14,8 +14,8 @@ import java.util.*;
 
 public class Main {
     private static final String ROOT = System.getProperty("user.dir") + "\\";
-    private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\project1";
-    //private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\project2";
+    private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\fast-serialization\\src\\main";
+    //private static final String PROJECT_FILE_PATH = "src\\ProjectFiles\\project1";
 
     public static void exit_(){
         System.exit(1);
@@ -61,8 +61,8 @@ public class Main {
                 importsArray = Json.array(imports_.toArray(String[]::new));
             }
 
-            System.out.println(classDataList);
-            System.out.println("");
+            //System.out.println(classDataList);
+            //System.out.println("");
 
             for(String classData: classDataList){
                 String[] classDataStr = classData.split("\\|");//System.out.println(Arrays.toString(classDataStr));
@@ -76,7 +76,7 @@ public class Main {
                     continue;
                 className = (packageName.size() > 0) ? packageName.get(0) + "." + className : className;
                 classNames.add(className);
-                System.out.println("className: " + className);
+                //System.out.println("className: " + className);
 
 
                 String allExtends = classDataStr[1];
@@ -84,14 +84,14 @@ public class Main {
                     allExtends = "";
                 allExtends = Extracter.extendsExtracter(allExtends, imports_, directory);
                 JsonArray extendsArray = (!allExtends.equals("")) ? Json.array(allExtends) : Json.array();
-                System.out.println("\tallExtends: " + allExtends);
+                //System.out.println("\tallExtends: " + allExtends);
 
 
                 String[] allImplementsArray = classDataStr[2].split(",");
                 for(String classImplements : allImplementsArray){
                     if(!classImplements.equals("_"))
                         implements_.add(classImplements);
-                    System.out.println("\tclassImplements: " + classImplements);
+                    //System.out.println("\tclassImplements: " + classImplements);
                 }
                 String[] allImplements = (implements_.size() > 0) ? Extracter.implementsExtracter(implements_, imports_, directory) : new String[]{};
                 JsonArray implementsArray = Json.array(allImplements);
@@ -101,7 +101,7 @@ public class Main {
                         .add("extends", extendsArray)
                         .add("implements", implementsArray);
 
-                System.out.println("endofloop className: " + className);
+                //System.out.println("endofloop className: " + className);
                 if(!className.equals(""))
                     classes.set(className, classInfos);
             }
@@ -118,7 +118,9 @@ public class Main {
         //System.out.println(aa.get(className[0]));
 
         Workbook workbook = ExcelAPI.createWorkbook();
+        System.out.println("line 121");
         workbook = ExcelAPI.writeDependencies(workbook, json);
+        System.out.println("LINE 123");
         ExcelAPI.saveWorksheet(workbook);
     }
 }
