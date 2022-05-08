@@ -154,7 +154,7 @@ public class DependencyWriter {
             data[pos] = data[i];
             data[i] = temp;
         }
-        data = new int[]{0, 0, 0, 1, 1, 1, 1, 5, 5, 6};
+
         double q1; double q3; double q2;
         double upper_bound;
         if(data.length%2 == 0){
@@ -174,7 +174,7 @@ public class DependencyWriter {
         System.out.println(upper_bound);
         //End Quartiles
         //Color With Outliers
-        /*for(int a=1;a <= allClassNames.size();a++){
+        for(int a=1;a <= allClassNames.size();a++){
             int count =0;
             int rowIndex = 0;
             firstRowOfClassDependencies = Imports.getRow(rowIndex);
@@ -195,7 +195,7 @@ public class DependencyWriter {
                 }
             }
             data[a-1] = count;
-        }*/
+        }
         //Color End
 
         /*int rightMostColumn = allClassNames.size()+2;

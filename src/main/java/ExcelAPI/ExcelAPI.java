@@ -107,6 +107,21 @@ public class ExcelAPI {
         return cellStyle;
     }
 
+    public static CellStyle getManyDependentHeaderStyleYellow(Cell cell, boolean isFirstRow){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+
+        cellStyle.setAlignment((isFirstRow) ? HorizontalAlignment.CENTER : HorizontalAlignment.LEFT);
+
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
+    }
+
     public static CellStyle getCellStyleOfClassDependencies(Cell cell, int rowNumber, int columnNumber){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -118,6 +133,19 @@ public class ExcelAPI {
             cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
             cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         }
+        return cellStyle;
+    }
+
+    public static CellStyle CommitNumberOutliers(Cell cell, int rowNumber, int columnNumber){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
         return cellStyle;
     }
 

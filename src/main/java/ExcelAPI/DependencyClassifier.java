@@ -82,26 +82,25 @@ public class DependencyClassifier {
                             else{
                                 int numOfChanges = changedWithStat.get(changedWith);
                                 changedWithStat.put(changedWith, ++numOfChanges);
+
                             }
                         }
                     }
                 }
+
             }
             firstIter = false;
         }
-
         Iterator it = commitStats.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             String commitChange = (String) pair.getKey();
             HashMap<String, Integer> changedWithAll = (HashMap<String, Integer>) pair.getValue();
-
             Iterator it_ = changedWithAll.entrySet().iterator();
             while(it_.hasNext()){
                 Map.Entry pair_ = (Map.Entry) it_.next();
                 String changedWith = (String) pair_.getKey();
                 int numOfChanges = (int) pair_.getValue();
-
                 if(commitStats.get(changedWith).get(commitChange) == null){
                     HashMap<String, Integer> newData = new HashMap<>();
                     newData.put(commitChange, numOfChanges);
@@ -110,7 +109,6 @@ public class DependencyClassifier {
             }
         }
     }
-
     public static void findCyclicDependencies(){
         Set<String> dependentClasses = cyclicDependenciesMap.keySet();
         for(String className : dependentClasses){
