@@ -192,6 +192,12 @@ public class DependencyWriter {
                         workbook.getSheetAt(0).getRow(a).getCell(0).setCellStyle(firstColumnManyDependentStyle);
                         head.setCellStyle(firstRowManyDependentStyle);
                     }
+                    if( upper_bound >= count && count >= q3){
+                        CellStyle firstRowManyDependentStyle = ExcelAPI.getManyDependentHeaderStyleYellow(head, true);
+                        CellStyle firstColumnManyDependentStyle = ExcelAPI.getManyDependentHeaderStyleYellow(head, false);
+                        workbook.getSheetAt(0).getRow(a).getCell(0).setCellStyle(firstColumnManyDependentStyle);
+                        head.setCellStyle(firstRowManyDependentStyle);
+                    }
                 }
             }
             data[a-1] = count;
