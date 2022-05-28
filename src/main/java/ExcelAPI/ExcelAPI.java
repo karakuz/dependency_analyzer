@@ -25,6 +25,8 @@ public class ExcelAPI {
 
         JsonObject classes = json.asObject().get("classes").asObject();
         JsonValue commits = value.asObject().get("commits");
+        int commit_size = commits.asArray().size();
+        System.out.println("COMMIT SİZE" + commit_size);
         commitClassifier(commits);
         System.out.println("AFTER commitClassifier");
 
@@ -63,7 +65,7 @@ public class ExcelAPI {
         //printCyclicDependencies();
 
         System.out.println("BEFORE writeAllDependencies");
-        writeAllDependencies(workbook, allClasses, cyclicDependencies, commitStats,
+        writeAllDependencies(workbook, allClasses, commit_size,cyclicDependencies, commitStats,
                 importDependencies,
                 extendDependencies,
                 implementDependencies,
@@ -136,7 +138,7 @@ public class ExcelAPI {
         return cellStyle;
     }
 
-    public static CellStyle CommitNumberOutliers(Cell cell, int rowNumber, int columnNumber){
+    public static CellStyle CommitNumberOutliersOrange(Cell cell/*int rowNumber, int columnNumber*/){
         CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setBorderTop(BorderStyle.MEDIUM);
@@ -144,6 +146,19 @@ public class ExcelAPI {
         cellStyle.setBorderBottom(BorderStyle.MEDIUM);
         cellStyle.setBorderLeft(BorderStyle.MEDIUM);
         cellStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
+    }
+
+    public static CellStyle CommitNumberOutliersYellow(Cell cell/*int rowNumber, int columnNumber*/){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         return cellStyle;
@@ -172,6 +187,42 @@ public class ExcelAPI {
         cellStyle.setBottomBorderColor(IndexedColors.RED.getIndex());
         cellStyle.setBorderLeft(BorderStyle.THICK);
         cellStyle.setLeftBorderColor(IndexedColors.RED.getIndex());
+
+        return cellStyle;
+    }
+
+    public static CellStyle getCyclicCellStyleCommitYellow(Cell cell){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setBorderTop(BorderStyle.THICK);
+        cellStyle.setTopBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderRight(BorderStyle.THICK);
+        cellStyle.setRightBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderBottom(BorderStyle.THICK);
+        cellStyle.setBottomBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderLeft(BorderStyle.THICK);
+        cellStyle.setLeftBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
+    }
+
+    public static CellStyle getCyclicCellStyleCommitOrange(Cell cell){
+        CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setBorderTop(BorderStyle.THICK);
+        cellStyle.setTopBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderRight(BorderStyle.THICK);
+        cellStyle.setRightBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderBottom(BorderStyle.THICK);
+        cellStyle.setBottomBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setBorderLeft(BorderStyle.THICK);
+        cellStyle.setLeftBorderColor(IndexedColors.RED.getIndex());
+        cellStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         return cellStyle;
     }

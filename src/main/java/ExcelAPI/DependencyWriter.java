@@ -18,9 +18,9 @@ public class DependencyWriter {
         return dependencyNames;
     };
 
-    public static Workbook writeAllDependencies(Workbook workbook, List<String> allClasses, List<String> cyclicDependencies, HashMap<String, HashMap<String,Integer>> commitStats, List<List<String>>... dependenciesList){
+    public static Workbook writeAllDependencies(Workbook workbook, List<String> allClasses,int commit_size, List<String> cyclicDependencies, HashMap<String, HashMap<String,Integer>> commitStats, List<List<String>>... dependenciesList){
         HashMap<Integer, String> dependencyNames = getDependencyNames();
-
+        ArrayList<Integer> comdata = new ArrayList<Integer>();
         Sheet Imports = workbook.createSheet("Dependencies");
 
         CellStyle tableHeaderStyleOfClassDependencies = workbook.createCellStyle();
@@ -50,6 +50,58 @@ public class DependencyWriter {
         List<List<String>> allImplementDependencies = dependenciesList[2];
         List<String> allCyclicDependencies = cyclicDependencies;
 
+        int test =0;
+        int rowNumber = 1;
+        for(int i=0; i<allClassNames.size(); i++){
+            String classNameOnRow = allClassNames.get(i);
+            columnNumber = 1;
+            for (String classNameOnColumn : allClassNames) {
+                if(!classNameOnColumn.equals(classNameOnRow) &&
+                        commitStats.get(classNameOnColumn) != null &&
+                        commitStats.get(classNameOnColumn).get(classNameOnRow) != null){
+                    comdata.add(commitStats.get(classNameOnColumn).get(classNameOnRow));
+
+                }
+            }
+
+        }
+        int zeros = commit_size - comdata.size();
+        for(int i =0;i<=zeros;i++){
+            comdata.add(0);
+        }
+        Integer[] commdata = new Integer[comdata.size()];
+        commdata = comdata.toArray(commdata);
+        int pos1; int temp1;
+        for (int i = 0; i < commdata.length; i++){
+            pos1 = i;
+            for (int j = i+1; j < commdata.length; j++)
+                if (commdata[j] < commdata[pos1])//find the index of the minimum element
+                    pos1 = j;
+
+            temp1 = commdata[pos1];            //swap the current element with the minimum element
+            commdata[pos1] = commdata[i];
+            commdata[i] = temp1;
+        }
+        List<Integer> list = Arrays.asList(commdata);
+        double q1c; double q3c; double q2c;
+        double upper_bound1;
+        if(commdata.length%2 == 0){
+            q1c = (commdata[(commdata.length) * 25 / 100] + commdata[((commdata.length) * 25 / 100) - 1]) / 2.0;
+            q3c = (commdata[(commdata.length)*75/100] + commdata[((commdata.length)*75/100)-1])/2.0;
+            System.out.println(q1c);
+            q2c = q3c-q1c;
+            upper_bound1 = q3c+(1.5*q2c);
+        }else{
+            q1c = commdata[(commdata.length)*25/100];
+            q3c = commdata[(commdata.length)*75/100];
+            q2c = q3c-q1c;
+            upper_bound1 = q3c+(1.5*q2c);
+        }
+        System.out.println("upper"+upper_bound1);
+        System.out.println("q3"+q3c);
+        System.out.println(list);
+
+
         /*Set<String> allCyclicDependencies = new HashSet<>();
         for(List<String> cyclicDependencyChain : dependenciesList[3]){
             for(String className : cyclicDependencyChain){
@@ -64,7 +116,7 @@ public class DependencyWriter {
         System.out.println("allExtendDependencies: ");
         System.out.println(allExtendDependencies);*/
 
-        int rowNumber = 1;
+        rowNumber = 1;
         for(int i=0; i<allClassNames.size(); i++){
             String classNameOnRow = allClassNames.get(i);
             List<String> importDependencies = allImportDependencies.get(i);
@@ -114,14 +166,51 @@ public class DependencyWriter {
                     cellValue = emptyCell;
                 Imports.autoSizeColumn(columnNumber);
                 isDependantOrNotCell.setCellValue(cellValue);
-                if(cyclicTo.contains(classNameOnColumn))
-                    isDependantOrNotCell.setCellStyle(ExcelAPI.getCyclicCellStyle(isDependantOrNotCell));
-                else
-                    isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);
-
                 Imports.autoSizeColumn(columnNumber++);
+                if(commitStats.get(classNameOnColumn) != null && commitStats.get(classNameOnColumn).get(classNameOnRow) !=null ){
+                    if(cyclicTo.contains(classNameOnColumn) && commitStats.get(classNameOnColumn).get(classNameOnRow) < q3c){
+                        isDependantOrNotCell.setCellStyle(ExcelAPI.getCyclicCellStyle(isDependantOrNotCell));}
+                    else if (cyclicTo.contains(classNameOnColumn) && commitStats.get(classNameOnColumn).get(classNameOnRow) > q3c
+                            && commitStats.get(classNameOnColumn).get(classNameOnRow) < upper_bound1){
+                        isDependantOrNotCell.setCellStyle(ExcelAPI.getCyclicCellStyleCommitYellow(isDependantOrNotCell));
+                    }else if(cyclicTo.contains(classNameOnColumn)
+                            && commitStats.get(classNameOnColumn).get(classNameOnRow) > upper_bound1){
+                        isDependantOrNotCell.setCellStyle(ExcelAPI.getCyclicCellStyleCommitOrange(isDependantOrNotCell));
+                    }
+                    else if(!cyclicTo.contains(classNameOnColumn) && commitStats.get(classNameOnColumn).get(classNameOnRow) < q3c){
+                        isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);}
+                    else if(!cyclicTo.contains(classNameOnColumn)
+                            && commitStats.get(classNameOnColumn).get(classNameOnRow) > q3c
+                            && commitStats.get(classNameOnColumn).get(classNameOnRow) < upper_bound1){
+                        isDependantOrNotCell.setCellStyle(ExcelAPI.CommitNumberOutliersYellow(isDependantOrNotCell));
+                    }else if(!cyclicTo.contains(classNameOnColumn)
+                            && commitStats.get(classNameOnColumn).get(classNameOnRow) > upper_bound1){
+                        isDependantOrNotCell.setCellStyle(ExcelAPI.CommitNumberOutliersOrange(isDependantOrNotCell));
+                    }
+                }else{
+                    if(cyclicTo.contains(classNameOnColumn))
+                        isDependantOrNotCell.setCellStyle(ExcelAPI.getCyclicCellStyle(isDependantOrNotCell));
+                    else
+                        isDependantOrNotCell.setCellStyle(cellStyleOfClassDependencies);
+                }
+
+
+
+
+
             }
         }
+        System.out.println("COMDATA" + comdata);
+        //SortDATA
+        //SortDataEnd
+
+        //CommitQuartiles
+
+        //CommitQuartilesEnd
+
+        //Test
+
+        //Test
         System.out.println("DEPENDENCYWRITER LINE 125");
         int[] data = new int[allClassNames.size()];
         for(int a=1;a <= allClassNames.size();a++){
@@ -191,6 +280,7 @@ public class DependencyWriter {
                         CellStyle firstColumnManyDependentStyle = ExcelAPI.getManyDependentHeaderStyle(head, false);
                         workbook.getSheetAt(0).getRow(a).getCell(0).setCellStyle(firstColumnManyDependentStyle);
                         head.setCellStyle(firstRowManyDependentStyle);
+
                     }
                     if( upper_bound >= count && count >= q3){
                         CellStyle firstRowManyDependentStyle = ExcelAPI.getManyDependentHeaderStyleYellow(head, true);
