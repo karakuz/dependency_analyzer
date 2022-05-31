@@ -86,14 +86,14 @@ public class DependencyWriter {
         double q1c; double q3c; double q2c;
         double upper_bound1;
         if(commdata.length%2 == 0){
-            q1c = (commdata[(commdata.length) * 25 / 100] + commdata[((commdata.length) * 25 / 100) - 1]) / 2.0;
-            q3c = (commdata[(commdata.length)*75/100] + commdata[((commdata.length)*75/100)-1])/2.0;
+            q1c = (commdata[(commdata.length +1) * 25 / 100] + commdata[((commdata.length +1) * 25 / 100) - 1]) / 2.0;
+            q3c = (commdata[(commdata.length + 1)*75/100] + commdata[((commdata.length+1)*75/100)-1])/2.0;
             System.out.println(q1c);
             q2c = q3c-q1c;
             upper_bound1 = q3c+(1.5*q2c);
         }else{
-            q1c = commdata[(commdata.length)*25/100];
-            q3c = commdata[(commdata.length)*75/100];
+            q1c = commdata[(commdata.length  + 1)*25/100];
+            q3c = commdata[(commdata.length + 1)*75/100];
             q2c = q3c-q1c;
             upper_bound1 = q3c+(1.5*q2c);
         }
@@ -244,19 +244,19 @@ public class DependencyWriter {
             data[i] = temp;
         }
 
-        double q1; double q3; double q2;
+        double q1; double q3; double IQR;
         double upper_bound;
         if(data.length%2 == 0){
-            q1 = (data[(data.length) * 25 / 100] + data[((data.length) * 25 / 100) - 1]) / 2.0;
-            q3 = (data[(data.length)*75/100] + data[((data.length)*75/100)-1])/2.0;
+            q1 = (data[(data.length +1) * 25 / 100] + data[((data.length +1) * 25 / 100) - 1]) / 2.0;
+            q3 = (data[(data.length +1)*75/100] + data[((data.length +1)*75/100)-1])/2.0;
             System.out.println(q1);
-            q2 = q3-q1;
-            upper_bound = q3+(1.5*q2);
+            IQR = q3-q1;
+            upper_bound = q3+(1.5*IQR);
         }else{
-            q1 = data[(data.length)*25/100];
-            q3 = data[(data.length)*75/100];
-            q2 = q3-q1;
-            upper_bound = q3+(1.5*q2);
+            q1 = data[(data.length +1)*25/100];
+            q3 = data[(data.length +1)*75/100];
+            IQR = q3-q1;
+            upper_bound = q3+(1.5*IQR);
         }
 
         System.out.println(q3);
